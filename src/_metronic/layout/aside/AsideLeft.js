@@ -73,7 +73,7 @@ function AsideLeft({open, setOpen}) {
           <div className="kt-aside__brand kt-grid__item " id="kt_aside_brand">
             <div className="kt-aside__brand-logo">
               <Link to="/">
-                <img alt="Logo" src="/media/logos/Kodeon-Logo-V1.1.svg" style={{width: '100%'}}/>
+                <img alt="Logo" src="/media/logos/recruitment-agency-logo.png" style={{width: '50px'}}/>
               </Link>
             </div>
             <div className="kt-aside__brand-tools">

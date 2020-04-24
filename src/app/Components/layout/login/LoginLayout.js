@@ -16,7 +16,7 @@ const LoginLayout = ({children, heading}) => {
               <div className="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
                 <div className="kt-login__container">
                   <div className="kt-login__logo m-0">
-                    <img src="/media/logos/suits-logo.png" width="200"/>
+                    <img src="/media/logos/recruitment-agency-logo.png" width="150"/>
                   </div>
                   <div className="kt-login__signin">
                     <div className="kt-login__head">
