@@ -1,7 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {connect} from "react-redux";
 
 const AccountPersonalInfoDetails = ({user}) => {
+  const [img, setImg] = useState(null)
+  const handleChangeProfile = event => {
+    setImg(URL.createObjectURL(event.target.files[0]))
+  }
   return (
     <div className="kt-form kt-form--label-right">
       <div className="kt-portlet__body">
@@ -13,14 +17,11 @@ const AccountPersonalInfoDetails = ({user}) => {
               </label>
               <div className="col-lg-9 col-xl-6">
                 <div className="kt-avatar kt-avatar--outline">
-                  <div className="kt-avatar__holder" style={{backgroundImage: "url(/media/users/100_13.jpg)"}}/>
+                  <img src={img ? img : "/media/users/100_13.jpg"} alt="" className="kt-avatar__holder"/>
                   <label className="kt-avatar__upload">
                     <i className="fa fa-pen" />
-                    <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg"/>
+                    <input type="file" name="profile_avatar" accept="image/*" onChange={handleChangeProfile}/>
                   </label>
-                  <span className="kt-avatar__cancel">
-                      <i className="fa fa-times" />
-                    </span>
                 </div>
               </div>
             </div>
@@ -35,25 +36,9 @@ const AccountPersonalInfoDetails = ({user}) => {
                 <div className='form-label'>
                   Sur Name
                 </div>
-                <h5>{user.surName}</h5>
-              </div><div className="form-group col-6">
-              <div className='form-label'>
-                Date of Birth
+                <h5>{user.lastName}</h5>
               </div>
-              <h5>{user.dob}</h5>
-            </div>
-              <div className="form-group col-6">
-                <div className='form-label'>
-                  Country
-                </div>
-                <h5>{user.country}</h5>
-              </div>
-              <div className="form-group col-6">
-                <div className='form-label'>
-                  Address
-                </div>
-                <h5>{user.address}</h5>
-              </div>
+
             </div>
 
           </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import {Server_URL} from "../../../utils/config";
 
 const AccountAside = ({ selected, setSelected, user }) => {
   return (
@@ -9,13 +10,12 @@ const AccountAside = ({ selected, setSelected, user }) => {
           <div className="kt-widget kt-widget--user-profile-1">
             <div className="kt-widget__head">
               <div className="kt-widget__media">
-                <img src="/media/users/100_13.jpg" alt="image" />
+                <img src={`${user.profileImage ? `${Server_URL}/images/${user.profileImage.filename}` : '/media/users/100_13.jpg'}`} alt="image" />
               </div>
               <div className="kt-widget__content">
                 <div className="kt-widget__section">
                   <span className="kt-widget__username">
-                    {`${user.firstName} ${user.surName}`}
-                    <i className="flaticon2-correct kt-font-success" />
+                    {`${user.firstName} ${user.lastName}`}
                   </span>
                 </div>
               </div>
@@ -28,11 +28,11 @@ const AccountAside = ({ selected, setSelected, user }) => {
                 </div>
                 <div className="kt-widget__info">
                   <span className="kt-widget__label">Phone:</span>
-                  <span className="kt-widget__data">{user.mobileNo}</span>
+                  <span className="kt-widget__data">{user.phone}</span>
                 </div>
                 <div className="kt-widget__info">
                   <span className="kt-widget__label">Location:</span>
-                  <span className="kt-widget__data">{user.country}</span>
+                  <span className="kt-widget__data">{user.address}</span>
                 </div>
               </div>
               <div className="kt-widget__items">
@@ -116,86 +116,6 @@ const AccountAside = ({ selected, setSelected, user }) => {
                       </svg>{" "}
                     </span>
                     <span className="kt-widget__desc">Change Password</span>
-                  </span>
-                </span>
-                <span
-                  onClick={() => setSelected(2)}
-                  className={`kt-widget__item ${selected === 2 &&
-                    "kt-widget__item--active"}`}
-                >
-                  <span className="kt-widget__section">
-                    <span className="kt-widget__icon">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                        className="kt-svg-icon"
-                      >
-                        <g
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
-                        >
-                          <rect x="0" y="0" width="24" height="24" />
-                          <path
-                            d="M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z"
-                            fill="#000000"
-                            opacity="0.3"
-                          />
-                          <path
-                            d="M11.1750002,14.75 C10.9354169,14.75 10.6958335,14.6541667 10.5041669,14.4625 L8.58750019,12.5458333 C8.20416686,12.1625 8.20416686,11.5875 8.58750019,11.2041667 C8.97083352,10.8208333 9.59375019,10.8208333 9.92916686,11.2041667 L11.1750002,12.45 L14.3375002,9.2875 C14.7208335,8.90416667 15.2958335,8.90416667 15.6791669,9.2875 C16.0625002,9.67083333 16.0625002,10.2458333 15.6791669,10.6291667 L11.8458335,14.4625 C11.6541669,14.6541667 11.4145835,14.75 11.1750002,14.75 Z"
-                            fill="#000000"
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                    <span className="kt-widget__desc">
-                      Google 2fa Verification
-                    </span>
-                  </span>
-                </span>
-                <span
-                  onClick={() => setSelected(3)}
-                  className={`kt-widget__item ${selected === 3 &&
-                    "kt-widget__item--active"}`}
-                >
-                  <span className="kt-widget__section">
-                    <span className="kt-widget__icon">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        version="1.1"
-                        className="kt-svg-icon"
-                      >
-                        <g
-                          stroke="none"
-                          strokeWidth="1"
-                          fill="none"
-                          fillRule="evenodd"
-                        >
-                          <rect x="0" y="0" width="24" height="24" />
-                          <path
-                            d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
-                            fill="#000000"
-                            opacity="0.3"
-                          />
-                          <path
-                            d="M10.875,16.75 C10.6354167,16.75 10.3958333,16.6541667 10.2041667,16.4625 L8.2875,14.5458333 C7.90416667,14.1625 7.90416667,13.5875 8.2875,13.2041667 C8.67083333,12.8208333 9.29375,12.8208333 9.62916667,13.2041667 L10.875,14.45 L14.0375,11.2875 C14.4208333,10.9041667 14.9958333,10.9041667 15.3791667,11.2875 C15.7625,11.6708333 15.7625,12.2458333 15.3791667,12.6291667 L11.5458333,16.4625 C11.3541667,16.6541667 11.1145833,16.75 10.875,16.75 Z"
-                            fill="#000000"
-                          />
-                        </g>
-                      </svg>
-                    </span>
-                    <span className="kt-widget__desc">
-                      Background Verification
-                    </span>
                   </span>
                 </span>
                 <span

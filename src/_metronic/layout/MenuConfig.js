@@ -10,25 +10,25 @@ export default {
         translate: "MENU.DASHBOARD"
       },
       {
-        title: "Deposit",
+        title: "Jobs",
         root: true,
         alignment: "left",
         toggle: "click",
-        page: "deposit"
+        page: "jobs"
       },
       {
-        title: "Withdrawl",
+        title: "Interviews",
         root: true,
         alignment: "left",
         toggle: "click",
-        page: "withdrawl"
+        page: "interviews"
       },
       {
-        title: "Account",
+        title: "Tests",
         root: true,
         alignment: "left",
         toggle: "click",
-        page: "account"
+        page: "tests"
       }
     ]
   },
@@ -44,22 +44,22 @@ export default {
         bullet: "dot"
       },
       {
-        title: "Deposit",
+        title: "Jobs",
         root: true,
         icon: "flaticon2-expand",
-        page: "deposit"
+        page: "jobs"
       },
       {
-        title: "Withdrawl",
+        title: "Interviews",
         root: true,
         icon: "flaticon2-expand",
-        page: "withdrawl"
+        page: "interviews"
       },
       {
-        title: "Account",
+        title: "Tests",
         root: true,
         icon: "flaticon2-expand",
-        page: "account"
+        page: "tests"
       }
     ]
   }

@@ -170,22 +170,22 @@ function AsideLeft({open, setOpen}) {
                     <span className="kt-menu__link-text">Dashboard</span>
                   </ListItem>
                 </NavLink>
-                <NavLink to="/deposit" activeClassName='kt-menu__item--active' className="kt-menu__item">
+                <NavLink to="/jobs" activeClassName='kt-menu__item--active' className="kt-menu__item">
                   <ListItem className="kt-menu__link w-100" >
-                    <i className='kt-menu__link-icon fa fa-angle-double-left'/>
-                    <span className="kt-menu__link-text">Deposit</span>
+                    <i className='kt-menu__link-icon fa fa-briefcase'/>
+                    <span className="kt-menu__link-text">Jobs</span>
                   </ListItem>
                 </NavLink>
-                <NavLink to="/withdrawl" activeClassName='kt-menu__item--active' className="kt-menu__item">
+                <NavLink to="/interviews" activeClassName='kt-menu__item--active' className="kt-menu__item">
                   <ListItem className="kt-menu__link w-100" >
-                    <i className='kt-menu__link-icon fa fa-angle-double-right'/>
-                    <span className="kt-menu__link-text">Withdrawl</span>
+                    <i className='kt-menu__link-icon fa fa-handshake'/>
+                    <span className="kt-menu__link-text">Interviews</span>
                   </ListItem>
                 </NavLink>
-                <NavLink to="/account" activeClassName='kt-menu__item--active' className="kt-menu__item">
+                <NavLink to="/tests" activeClassName='kt-menu__item--active' className="kt-menu__item">
                   <ListItem className="kt-menu__link w-100" >
-                    <i className='kt-menu__link-icon fa fa-sliders-h'/>
-                    <span className="kt-menu__link-text">Account</span>
+                    <i className='kt-menu__link-icon fa fa-check-double'/>
+                    <span className="kt-menu__link-text">Tests</span>
                   </ListItem>
                 </NavLink>
               </List>

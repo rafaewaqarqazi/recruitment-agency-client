@@ -62,7 +62,7 @@ class UserProfile extends React.Component {
             <div className="kt-user-card__name">{user.firstName}</div>
           </div>
           <div className="kt-notification">
-            <Link to={'/profile'} className="kt-notification__item">
+            <Link to={'/account'} className="kt-notification__item">
               <div className="kt-notification__item-icon">
                 <i className="flaticon2-calendar-3 kt-font-success" />
               </div>
