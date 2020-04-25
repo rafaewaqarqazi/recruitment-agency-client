@@ -6,9 +6,6 @@ export const validateRegistration = (values, current) => {
   if (current === 0 && values.lastName.trim() === '') {
     errors.lastName = 'Last Name is Required!'
   }
-  if (current === 0 && values.role.trim() === '') {
-    errors.role = 'Role is Required!'
-  }
   if (current === 1 && values.email.trim() === '') {
     errors.email = 'Email is required!';
   } else if (current === 1 &&
@@ -27,7 +24,10 @@ export const validateRegistration = (values, current) => {
   } else if (current === 1 && values.password !== values.confirmPassword) {
     errors.confirmPassword = 'Password Does not Match'
   }
-  if (current === 2 && !values.agree) {
+  if (current === 2 && !values.cv) {
+    errors.cv = 'Please Upload Your CV'
+  }
+  if (current === 3 && !values.agree) {
     errors.agree = 'Please Agree to our privacy and service policy'
   }
   return errors;

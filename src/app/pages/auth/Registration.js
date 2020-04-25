@@ -15,6 +15,7 @@ import RegistrationHeader from "../../Components/layout/registration/Registratio
 import { login, register } from "../../crud/auth.crud";
 import { validateRegistration } from "../../../utils/validations/registrationValidations";
 import { useHistory } from "react-router-dom";
+import RegistrationWizardCv from "../../Components/registration/wizard/RegistrationWizardCV";
 function Registration({ intl }) {
   const history = useHistory();
   const [current, setCurrent] = useState(0);
@@ -41,10 +42,10 @@ function Registration({ intl }) {
             initialValues={{
               firstName: "",
               lastName: "",
-              role: "",
               email: "",
               password: "",
               confirmPassword: "",
+              cv: null,
               agree: ""
             }}
             validate={values => validateRegistration(values, current)}
@@ -52,7 +53,10 @@ function Registration({ intl }) {
             validateOnBlur={false}
             onSubmit={(values, { setStatus, setSubmitting }) => {
               enableLoading();
-              register({ ...values, confirmPassword: undefined, agree: undefined })
+              const formData = new FormData();
+              formData.set('cv', values.cv)
+              formData.set('data', JSON.stringify({...values, cv: undefined, confirmPassword: undefined, agree: undefined}))
+              register(formData)
                 .then(res => {
                   if (!res.data.success) {
                     setStatus(
@@ -90,14 +94,12 @@ function Registration({ intl }) {
               values,
               status,
               errors,
-              touched,
-              handleChange,
-              handleBlur,
               handleSubmit,
-              isSubmitting,
-              validateForm
+              validateForm,
+              setFieldValue
             }) => (
               <Fragment>
+                {console.log('values', values)}
                 <RegistrationWizardHeader
                   current={current}
                   setCurrent={setCurrent}
@@ -131,6 +133,9 @@ function Registration({ intl }) {
                         <RegistrationWizardFormCredentials errors={errors} />
                       )}
                       {current === 2 && (
+                        <RegistrationWizardCv errors={errors} setFieldValue={setFieldValue} values={values}/>
+                      )}
+                      {current === 3 && (
                         <RegistrationWizardFormConfirm errors={errors} />
                       )}
                       <RegistrationWizardActions

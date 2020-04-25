@@ -4,9 +4,11 @@ const RegistrationWizardActions = ({current, setCurrent, loadingButtonStyle, loa
   const handleNextStep = () => {
     validateForm()
       .then((errors) => {
-        if (current === 0 && !errors.firstName && !errors.lastName && !errors.role) {
+        if (current === 0 && !errors.firstName && !errors.lastName) {
           setCurrent(current + 1)
         } else if (current === 1 && !errors.email && !errors.password && !errors.confirmPassword) {
+          setCurrent(current + 1)
+        } else if (current === 2 && !errors.cv) {
           setCurrent(current + 1)
         }
         return errors
@@ -21,7 +23,7 @@ const RegistrationWizardActions = ({current, setCurrent, loadingButtonStyle, loa
         </button>
       }
       {
-        current === 2 &&
+        current === 3 &&
         <button
           type='submit'
           className={`btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u ${clsx(
@@ -35,7 +37,7 @@ const RegistrationWizardActions = ({current, setCurrent, loadingButtonStyle, loa
         </button>
       }
       {
-        current !== 2 &&
+        current !== 3 &&
         <button type='button' onClick={handleNextStep} className="btn btn-brand btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u float-right">
           Next Step
         </button>

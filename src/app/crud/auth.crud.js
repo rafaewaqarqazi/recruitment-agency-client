@@ -21,7 +21,7 @@ export function loginWithCode(code) {
 }
 
 export function register(data) {
-  return axios.post(REGISTER_URL, data);
+  return axios.post(`${REGISTER_URL}/pdf`, data);
 }
 
 export function requestPassword(email) {

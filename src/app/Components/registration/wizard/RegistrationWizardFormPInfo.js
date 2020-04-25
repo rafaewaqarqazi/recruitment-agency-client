@@ -18,14 +18,6 @@ const RegistrationWizardFormPInfo = ({errors}) => {
         {formErrorMessage(errors.lastName)}
         <Field className="form-control" name="lastName" placeholder="Last Name" required/>
         <span className="form-text text-muted">Please enter your Last Name</span>
-      </div><div className="form-group">
-        <label>Register As</label>
-        {formErrorMessage(errors.role)}
-        <Field className="form-control" name="role" as='select'>
-          <option value="">Select Role</option>
-          <option value="1">Client</option>
-          <option value="2">Lawyer</option>
-        </Field>
       </div>
     </RegistrationWizardContent>
   );
