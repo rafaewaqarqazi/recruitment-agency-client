@@ -99,7 +99,6 @@ function Registration({ intl }) {
               setFieldValue
             }) => (
               <Fragment>
-                {console.log('values', values)}
                 <RegistrationWizardHeader
                   current={current}
                   setCurrent={setCurrent}

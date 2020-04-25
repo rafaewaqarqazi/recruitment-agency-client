@@ -41,7 +41,7 @@ const RegistrationWizardCv = ({errors, setFieldValue, values}) => {
                 {
                   isDragActive
                     ? <span>Drop the file here ...</span>
-                    : <span>Drag 'n' drop file here, or click to select file</span>
+                    : <span>Drag 'n' drop file in pdf here, or click to select file</span>
                 }
               </div>
             </section>
