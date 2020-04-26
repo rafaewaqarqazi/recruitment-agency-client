@@ -17,6 +17,13 @@ export default {
         page: "jobs"
       },
       {
+        title: "New Job",
+        root: true,
+        alignment: "left",
+        toggle: "click",
+        page: "jobs/new"
+      },
+      {
         title: "Interviews",
         root: true,
         alignment: "left",

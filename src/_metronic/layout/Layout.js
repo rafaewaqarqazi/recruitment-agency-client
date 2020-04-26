@@ -20,6 +20,7 @@ import '../../_metronic/_assets/sass/global/layout/aside/skins/dark.scss'
 import MainFooter from "../../app/Components/layout/main/MainFooter";
 import {makeStyles} from "@material-ui/styles";
 import clsx from "clsx";
+import Hidden from "@material-ui/core/Hidden";
 const htmlClassService = new HTMLClassService();
 const drawerWidth = 265;
 const useStyles = makeStyles(theme => ({
@@ -98,7 +99,9 @@ function Layout({children, layoutConfig}) {
         {/* <!-- begin::Body --> */}
         <HeaderMobile />
         <div className="d-flex kt-wrapper">
-          <AsideLeft open={open} setOpen={setOpen}/>
+          <Hidden xsDown>
+            <AsideLeft open={open} setOpen={setOpen}/>
+          </Hidden>
           <div className={clsx(classes.appBar, {
             [classes.appBarShift]: open,
             [classes.appBarShiftLeft]: !open

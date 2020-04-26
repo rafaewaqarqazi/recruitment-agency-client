@@ -1,9 +1,9 @@
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { put, takeLatest } from "redux-saga/effects";
-import { getUserByToken } from "../../crud/auth.crud";
+import { getAllJobs } from "../../crud/job.crud";
 import * as routerHelpers from "../../router/RouterHelpers";
-
+import * as jobsActions from './jobs.duck'
 export const actionTypes = {
   Login: "[Login] Action",
   Logout: "[Logout] Action",
@@ -60,5 +60,10 @@ export const actions = {
 };
 
 export function* saga() {
+  yield takeLatest(actionTypes.Login, function* getJobs() {
+    console.log('here')
+    const { data: {jobs}} = yield getAllJobs();
 
+    yield put(jobsActions.actions.addJobs(jobs));
+  });
 }

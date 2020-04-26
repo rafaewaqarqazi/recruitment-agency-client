@@ -9,23 +9,24 @@ import React from "react";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import { useLastLocation } from "react-router-last-location";
-import HomePage from "../pages/home/HomePage";
+import HomePage from "../pages/admin/HomePage";
 import ErrorsPage from "../pages/errors/ErrorsPage";
 import LogoutPage from "../pages/auth/Logout";
 import { LayoutContextProvider } from "../../_metronic";
 import Layout from "../../_metronic/layout/Layout";
 import * as routerHelpers from "../router/RouterHelpers";
 import AuthPage from "../pages/auth/AuthPage";
-import FAQsPage from "../pages/faq/FAQsPage";
-import MainLayout from "../Components/layout/main/MainLayout";
+import UserLayout from "../Components/layout/user/UserLayout";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 
 export const Routes = withRouter(({ history }) => {
     const lastLocation = useLastLocation();
     routerHelpers.saveLastLocation(lastLocation);
-    const { isAuthorized, menuConfig, userLastLocation } = useSelector(
+    const { isUser, isAdmin, isAuthorized, menuConfig, userLastLocation } = useSelector(
         ({ auth, urls, builder: { menuConfig } }) => ({
             menuConfig,
+            isUser: auth.user && auth.user.role === '1',
+            isAdmin: auth.user && auth.user.role === '2',
             isAuthorized: auth.user != null,
             userLastLocation: routerHelpers.getLastLocation()
         }),
@@ -48,13 +49,17 @@ export const Routes = withRouter(({ history }) => {
                 <Route path="/error" component={ErrorsPage} />
                 <Route path="/logout" component={LogoutPage} />
 
-                {!isAuthorized ? (
-                    /* Redirect to `/auth` when user is not authorized */
-                    <Redirect to="/auth/login" />
+                {isAdmin ? (
+                  <Layout >
+                    <HomePage userLastLocation={userLastLocation} />
+                  </Layout>
+                ) : isUser ? (
+                  <UserLayout >
+                    <HomePage userLastLocation={userLastLocation} />
+                  </UserLayout>
                 ) : (
-                    <Layout >
-                        <HomePage userLastLocation={userLastLocation} />
-                    </Layout>
+                  /* Redirect to `/auth` when user is not authorized */
+                  <Redirect to="/auth/login" />
                 )}
             </Switch>
         </LayoutContextProvider>
