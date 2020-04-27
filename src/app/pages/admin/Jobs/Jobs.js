@@ -33,7 +33,11 @@ const Jobs = ({jobsList}) => {
             </thead>
             <tbody>
             {
-              jobsList.map((job, i) => (
+              jobsList.length === 0
+                ? <tr >
+                  <td colSpan={8} style={{textAlign: 'center'}}>No Jobs Found</td>
+                </tr>
+                : jobsList.map((job, i) => (
                 <tr key={i}>
                   <td>{i+1}</td>
                   <td>{job.title}</td>

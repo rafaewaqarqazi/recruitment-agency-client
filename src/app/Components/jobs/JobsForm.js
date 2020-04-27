@@ -4,7 +4,9 @@ import {formErrorMessage} from "../../pages/errors/FormErrorMessage";
 import {categories, departments, experience, qualifications, types} from "../../../utils/job-post-data";
 import {Chip} from '@material-ui/core'
 import clsx from "clsx";
+import { useHistory } from "react-router-dom";
 const JobsForm = ({errors, values, setFieldValue, isSubmitting, loading, loadingButtonStyle}) => {
+  const history = useHistory();
   const handleChangeQualification = event => {
     const value = [].slice
       .call(event.target.selectedOptions)
@@ -129,7 +131,7 @@ const JobsForm = ({errors, values, setFieldValue, isSubmitting, loading, loading
         )}`}
         style={loadingButtonStyle}
       >
-        Post Job
+        {history.location.pathname.includes('/jobs/edit') ? 'Save ' : 'Post '} Job
       </button>
     </div>
   </Fragment>

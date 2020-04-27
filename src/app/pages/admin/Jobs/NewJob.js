@@ -6,10 +6,10 @@ import {connect} from "react-redux";
 import * as job from "../../../store/ducks/jobs.duck";
 import JobsForm from "../../../Components/jobs/JobsForm";
 import {jobPostValidations} from "../../../../utils/validations/jobPostValidations";
-import {postJob} from "../../../crud/job.crud";
+import {postJob, editJob} from "../../../crud/job.crud";
 import { useHistory, useParams } from "react-router-dom";
 
-const NewJob = ({ intl, addNewJob, jobsList }) => {
+const NewJob = ({ intl, addNewJob, jobsList, jobEdit }) => {
   const history = useHistory();
   const params = useParams();
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,39 @@ const NewJob = ({ intl, addNewJob, jobsList }) => {
     qualifications: [],
     experience: ""
   }
+  const response = ({res, setStatus}) => {
+    if (!res.data.success) {
+      setStatus(
+        intl.formatMessage({
+          id: "AUTH.VALIDATION.INVALID_REGISTRATION",
+          defaultMessage: res.data.message
+        })
+      );
+    } else {
+      setStatus(
+        intl.formatMessage({
+          id: "AUTH.VALIDATION.REGISTRATION_SUCCESS",
+          defaultMessage: history.location.pathname.includes('/jobs/edit') ? "Successfully Edited Job!" : "Successfully Posted Job!"
+        })
+      );
+      history.location.pathname.includes('/jobs/edit') ? jobEdit(res.data.job)
+        : addNewJob(res.data.job)
+      setTimeout(() => {
+        history.push("/jobs");
+      }, 2000);
+    }
+    disableLoading();
+  }
+  const catchError = ({setSubmitting, setStatus}) => {
+    disableLoading();
+    setSubmitting(false);
+    setStatus(
+      intl.formatMessage({
+        id: "AUTH.VALIDATION.INVALID_REGISTRATION",
+        defaultMessage: "Something Went Wrong!"
+      })
+    );
+  }
   return (
     <div>
       <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
@@ -52,38 +85,20 @@ const NewJob = ({ intl, addNewJob, jobsList }) => {
             onSubmit={(values, { setStatus, setSubmitting }) => {
               enableLoading();
               console.log('values', values)
-              postJob(values)
+              history.location.pathname.includes('/jobs/edit')
+              ? editJob(values)
+                  .then(res => {
+                    response({res, setStatus})
+                  })
+                  .catch(error => {
+                    catchError({setSubmitting, setStatus})
+                  })
+              : postJob(values)
                 .then(res => {
-                  if (!res.data.success) {
-                    setStatus(
-                      intl.formatMessage({
-                        id: "AUTH.VALIDATION.INVALID_REGISTRATION",
-                        defaultMessage: res.data.message
-                      })
-                    );
-                  } else {
-                    setStatus(
-                      intl.formatMessage({
-                        id: "AUTH.VALIDATION.REGISTRATION_SUCCESS",
-                        defaultMessage: "Successfully Posted Job!"
-                      })
-                    );
-                    addNewJob(res.data.job)
-                    setTimeout(() => {
-                      history.push("/jobs");
-                    }, 2000);
-                  }
-                  disableLoading();
+                  response({res, setStatus})
                 })
                 .catch(error => {
-                  disableLoading();
-                  setSubmitting(false);
-                  setStatus(
-                    intl.formatMessage({
-                      id: "AUTH.VALIDATION.INVALID_REGISTRATION",
-                      defaultMessage: "Something Went Wrong!"
-                    })
-                  );
+                  catchError({setSubmitting, setStatus})
                 });
             }}
           >
@@ -99,12 +114,12 @@ const NewJob = ({ intl, addNewJob, jobsList }) => {
                 <div className="kt-grid__item kt-grid__item--fluid kt-wizard-v3__wrapper">
                   <div className="kt-form">
                     <Form onSubmit={handleSubmit}>
-                      {status && status !== "Successfully Registered!" && (
+                      {status && status !== "Successfully Registered!" && status !== "Successfully Edited Job!" && (
                         <div role="alert" className="alert alert-danger">
                           <div className="alert-text">{status}</div>
                         </div>
                       )}
-                      {status && status === "Successfully Registered!" && (
+                      {status && (status === "Successfully Posted Job!" || status === "Successfully Edited Job!") && (
                         <div role="alert" className="alert alert-success">
                           <div className="alert-text">{status}</div>
                         </div>
