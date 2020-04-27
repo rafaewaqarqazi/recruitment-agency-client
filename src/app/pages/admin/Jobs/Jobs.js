@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {categories, departments, types} from "../../../../utils/job-post-data";
 import moment from 'moment'
+import {Tooltip} from "@material-ui/core";
 const Jobs = ({jobsList}) => {
   return (
     <div>
@@ -27,6 +28,7 @@ const Jobs = ({jobsList}) => {
               <th>Type</th>
               <th>Posted On</th>
               <th>Due Date</th>
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -40,6 +42,16 @@ const Jobs = ({jobsList}) => {
                   <td>{types.filter(t => t.code === job.type)[0].title}</td>
                   <td>{moment(job.postedOn).format('DD/MM/YYYY')}</td>
                   <td>{moment(job.dueDate).format('DD/MM/YYYY')}</td>
+                  <td>
+                    <Tooltip title='Edit Post' placement='top'>
+                      <Link to={`/jobs/edit/${job._id}`}>
+                        <i className='fa fa-pencil-alt mr-4'/>
+                      </Link>
+                    </Tooltip>
+                    <Tooltip title='Delete Post' placement='top'>
+                      <i className='fa fa-minus-circle' style={{color: 'red'}}/>
+                    </Tooltip>
+                  </td>
                 </tr>
               ))
             }

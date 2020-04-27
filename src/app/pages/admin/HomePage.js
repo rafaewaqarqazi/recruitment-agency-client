@@ -19,6 +19,7 @@ export default function HomePage() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/jobs" component={Jobs} exact/>
         <Route path="/jobs/new" component={NewJob} exact/>
+        <Route path="/jobs/edit/:jobId" component={NewJob} exact/>
         <Route path="/interviews" component={Interviews} />
         <Route path="/tests" component={Tests}/>
         <Route path="/account" component={Account}/>

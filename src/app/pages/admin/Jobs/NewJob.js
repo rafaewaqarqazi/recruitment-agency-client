@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {Portlet, PortletBody} from "../../../partials/content/Portlet";
 import {Form, Formik} from "formik";
 import {injectIntl} from "react-intl";
@@ -7,14 +7,15 @@ import * as job from "../../../store/ducks/jobs.duck";
 import JobsForm from "../../../Components/jobs/JobsForm";
 import {jobPostValidations} from "../../../../utils/validations/jobPostValidations";
 import {postJob} from "../../../crud/job.crud";
-import { useHistory } from "react-router-dom";
-const NewJob = ({ intl, addNewJob }) => {
+import { useHistory, useParams } from "react-router-dom";
+
+const NewJob = ({ intl, addNewJob, jobsList }) => {
   const history = useHistory();
+  const params = useParams();
   const [loading, setLoading] = useState(false);
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
     paddingRight: "1.2rem"
   });
-
   const enableLoading = () => {
     setLoading(true);
     setLoadingButtonStyle({ paddingRight: "3.5rem" });
@@ -24,22 +25,29 @@ const NewJob = ({ intl, addNewJob }) => {
     setLoading(false);
     setLoadingButtonStyle({ paddingRight: "1.2rem" });
   };
+  const initialState = {
+    title: "",
+    category: "",
+    description: "",
+    department: "",
+    type: "",
+    dueDate: "",
+    qualifications: [],
+    experience: ""
+  }
   return (
     <div>
       <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
         <PortletBody>
           <h3>Job Details</h3>
           <Formik
-            initialValues={{
-              title: "",
-              category: "",
-              description: "",
-              department: "",
-              type: "",
-              dueDate: "",
-              qualifications: [],
-              experience: ""
-            }}
+            initialValues={
+              params.jobId ?
+                jobsList.filter(j => j._id === params.jobId).length > 0 ?
+                  jobsList.filter(j => j._id === params.jobId)[0]
+                  : initialState
+                : initialState
+            }
             validate={jobPostValidations}
             onSubmit={(values, { setStatus, setSubmitting }) => {
               enableLoading();
@@ -113,5 +121,8 @@ const NewJob = ({ intl, addNewJob }) => {
     </div>
   );
 };
+const mapStateToProps = ({ jobs: {jobsList} }) => ({
+  jobsList
+});
 
-export default injectIntl(connect(null, job.actions)(NewJob));
+export default injectIntl(connect(mapStateToProps, job.actions)(NewJob));
