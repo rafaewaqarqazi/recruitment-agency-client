@@ -114,7 +114,7 @@ const NewJob = ({ intl, addNewJob, jobsList, jobEdit }) => {
                 <div className="kt-grid__item kt-grid__item--fluid kt-wizard-v3__wrapper">
                   <div className="kt-form">
                     <Form onSubmit={handleSubmit}>
-                      {status && status !== "Successfully Registered!" && status !== "Successfully Edited Job!" && (
+                      {status && status !== "Successfully Posted Job!" && status !== "Successfully Edited Job!" && (
                         <div role="alert" className="alert alert-danger">
                           <div className="alert-text">{status}</div>
                         </div>

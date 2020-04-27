@@ -41,6 +41,12 @@ export const reducer = persistReducer(
           jobsList: newState
         };
       }
+      case actionTypes.RemoveJob: {
+        const { id } = action.payload;
+        return {
+          jobsList: state.jobsList.filter(job => job._id !== id)
+        };
+      }
 
       default:
         return state;

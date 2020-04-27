@@ -1,23 +1,68 @@
-import React from 'react';
-import {Portlet, PortletBody} from "../../../partials/content/Portlet";
-import {Table} from 'react-bootstrap'
+import React, {useState} from 'react';
+import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../../partials/content/Portlet";
+import {Modal, Table, Alert} from 'react-bootstrap'
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {categories, departments, types} from "../../../../utils/job-post-data";
 import moment from 'moment'
 import {Tooltip} from "@material-ui/core";
-const Jobs = ({jobsList}) => {
+import {deleteJob} from "../../../crud/job.crud";
+import * as job from "../../../store/ducks/jobs.duck";
+
+const Jobs = ({jobsList, removeJob}) => {
+  const [show, setShow] = useState(false);
+  const [jobId, setJobId] = useState('');
+  const [error, setError] = useState({show: false, message: ''});
+  const [success, setSuccess] = useState({show: false, message: ''});
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    setJobId(id)
+    setShow(true);
+  }
+  const confirmDelete = () => {
+    deleteJob(jobId)
+      .then(res => {
+        if (!res.data.success) {
+          setError({show: true, message: res.data.message})
+          handleClose()
+          closeAlert()
+        } else {
+          setSuccess({show: true, message: res.data.message})
+          handleClose()
+          removeJob(jobId)
+          closeAlert()
+        }
+      })
+      .catch(error => {
+        setError({show: true, message: 'Could not delete Job Post'})
+        handleClose()
+        closeAlert()
+      })
+  }
+  const closeAlert = () => {
+    setTimeout(() => {
+      setError({show: false, message: ''})
+      setSuccess({show: false, message: ''})
+    }, 3000)
+  }
   return (
     <div>
+      <Alert show={success.show} variant="success">{success.message}</Alert>
+      <Alert show={error.show} variant="danger">{error.message}</Alert>
       <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
+        <PortletHeader
+          title='Jobs'
+          toolbar={
+            <PortletHeaderToolbar>
+              <Link to='/jobs/new'>
+                <button className='btn btn-label btn-bold btn-sm'>
+                  <i className='fa fa-plus'/> New Job Post
+                </button>
+              </Link>
+            </PortletHeaderToolbar>
+          }
+        />
         <PortletBody>
-          <div className='d-flex justify-content-end'>
-            <Link to='/jobs/new'>
-              <button className='btn btn-label btn-bold btn-sm'>
-                <i className='fa fa-plus'/> New Post
-              </button>
-            </Link>
-          </div>
           <Table responsive>
             <thead>
             <tr>
@@ -53,7 +98,7 @@ const Jobs = ({jobsList}) => {
                       </Link>
                     </Tooltip>
                     <Tooltip title='Delete Post' placement='top'>
-                      <i className='fa fa-minus-circle' style={{color: 'red'}}/>
+                      <i className='fa fa-minus-circle' style={{color: 'red'}} onClick={() => handleShow(job._id)}/>
                     </Tooltip>
                   </td>
                 </tr>
@@ -63,6 +108,20 @@ const Jobs = ({jobsList}) => {
           </Table>
         </PortletBody>
       </Portlet>
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Job</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this job post?</Modal.Body>
+        <Modal.Footer>
+          <button className='btn btn-primary btn-sm' onClick={handleClose}>
+            Close
+          </button>
+          <button className='btn btn-danger btn-sm' onClick={confirmDelete}>
+            Delete
+          </button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
@@ -70,4 +129,4 @@ const mapStateToProps = ({ jobs: {jobsList} }) => ({
   jobsList
 });
 
-export default connect(mapStateToProps)(Jobs);
+export default connect(mapStateToProps, job.actions)(Jobs);
