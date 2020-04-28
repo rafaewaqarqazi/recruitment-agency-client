@@ -10,7 +10,9 @@ export const departments = [
   {code: 'd9', title: 'Finance'},
   {code: 'd10', title: 'Environment'}
 ]
-
+export const getDepartment = (code) => {
+  return departments.filter(d => d.code === code)[0].title
+}
 export const categories = [
   {code: 'c1', title: 'Administrative'},
   {code: 'c2', title: 'Banking'},
@@ -21,12 +23,18 @@ export const categories = [
   {code: 'c7', title: 'Health'},
   {code: 'c8', title: 'IT'}
 ]
-
+export const getCategory = (code) => {
+  return categories.filter(c => c.code === code)[0].title
+}
 export const types = [
   {code: 't1', title: 'Full Time'},
   {code: 't2', title: 'Part Time'},
   {code: 't3', title: 'Project Based'},
 ]
+export const getType = code => {
+  return types.filter(t => t.code === code)[0].title
+}
+
 export const qualifications = [
   {code: 'q1', title: 'Matriculation'},
   {code: 'q2', title: 'FA/FSC'},
@@ -43,7 +51,9 @@ export const qualifications = [
   {code: 'q13', title: 'Phd (Information Technology)'},
   {code: 'q14', title: 'Phd (Electrical Engineering Science)'},
 ]
-
+export const getQualification = code => {
+  return qualifications.filter(q => q.code === code)[0].title
+}
 export const experience = [
   {code: 'e1', title: '1+ Year'},
   {code: 'e2', title: '2+ Year'},
@@ -52,3 +62,6 @@ export const experience = [
   {code: 'e5', title: '5+ Year'},
   {code: 'e6', title: '6+ Year'},
 ]
+export const getExperience = code => {
+  return experience.filter(e => e.code === code)[0].title
+}

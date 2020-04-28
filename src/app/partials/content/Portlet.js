@@ -11,7 +11,8 @@ export const PortletHeaderTitle = forwardRef(({ className, ...props }, ref) => (
   <h3
     {...props}
     ref={ref}
-    className={clsx("kt-portlet__head-title", className)}
+    className={clsx("kt-portlet__head-title text-nowrap overflow-hidden", className)}
+    style={{textOverflow: 'ellipsis'}}
   />
 ));
 
@@ -95,7 +96,7 @@ export const PortletHeader = forwardRef(
         {title != null && (
           <div
             ref={labelRef}
-            className={clsx("kt-portlet__head-label", className)}
+            className={clsx("kt-portlet__head-label overflow-hidden", className)}
           >
             {icon}
 

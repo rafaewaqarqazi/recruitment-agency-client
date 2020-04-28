@@ -2,14 +2,14 @@
  * High level router.
  *
  * Note: It's recommended to compose related routes in internal router
- * components (e.g: `src/pages/auth/AuthPage`, `src/pages/home/HomePage`).
+ * components (e.g: `src/pages/auth/AuthPage`, `src/pages/home/AdminPages`).
  */
 
 import React from "react";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import { useLastLocation } from "react-router-last-location";
-import HomePage from "../pages/admin/HomePage";
+import AdminPages from "../pages/admin/AdminPages";
 import ErrorsPage from "../pages/errors/ErrorsPage";
 import LogoutPage from "../pages/auth/Logout";
 import { LayoutContextProvider } from "../../_metronic";
@@ -51,11 +51,11 @@ export const Routes = withRouter(({ history }) => {
 
                 {isAdmin ? (
                   <Layout >
-                    <HomePage userLastLocation={userLastLocation} />
+                    <AdminPages userLastLocation={userLastLocation} />
                   </Layout>
                 ) : isUser ? (
                   <UserLayout >
-                    <HomePage userLastLocation={userLastLocation} />
+                    {/*<AdminPages userLastLocation={userLastLocation} />*/}
                   </UserLayout>
                 ) : (
                   /* Redirect to `/auth` when user is not authorized */

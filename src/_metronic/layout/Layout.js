@@ -114,7 +114,6 @@ function Layout({children, layoutConfig}) {
           <main className={clsx(classes.content, classes.contentShift)}>
             <SubHeader/>
             <KtContent>{children}</KtContent>
-            <MainFooter/>
           </main>
         </div>
 
