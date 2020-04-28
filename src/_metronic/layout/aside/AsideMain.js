@@ -1,58 +1,13 @@
-import React, {useState} from "react";
-import {connect} from "react-redux";
-import * as builder from "../../ducks/builder";
-import {Link, NavLink} from "react-router-dom";
-import {List, ListItem, Drawer} from '@material-ui/core'
+import React from 'react';
+import {useAsideStyles} from "../../../utils/material-styles/asideStyles";
+import {Drawer} from "@material-ui/core";
 import clsx from "clsx";
-import {makeStyles} from "@material-ui/styles";
+import {Link} from "react-router-dom";
+import * as builder from "../../ducks/builder";
+import {connect} from "react-redux";
 
-const drawerWidth = 265
-const useStyles = makeStyles(theme => ({
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    background: '#1e1e2d',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: 70,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-    background: '#1e1e2d'
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  }
-}))
-function AsideLeft({open, setOpen}) {
-  const classes = useStyles();
+const AsideMain = ({open, setOpen,children}) => {
+  const classes = useAsideStyles();
   return (
     <>
       <Drawer
@@ -163,32 +118,7 @@ function AsideLeft({open, setOpen}) {
               data-ktmenu-scroll="1"
               data-ktmenu-dropdown-timeout="500"
             >
-              <List className="kt-menu__nav ">
-                <NavLink to="/dashboard" activeClassName='kt-menu__item--active' className="kt-menu__item">
-                  <ListItem className='kt-menu__link w-100'>
-                    <i className='kt-menu__link-icon fa fa-chart-bar'/>
-                    <span className="kt-menu__link-text">Dashboard</span>
-                  </ListItem>
-                </NavLink>
-                <NavLink to="/jobs" activeClassName='kt-menu__item--active' className="kt-menu__item">
-                  <ListItem className="kt-menu__link w-100" >
-                    <i className='kt-menu__link-icon fa fa-briefcase'/>
-                    <span className="kt-menu__link-text">Jobs</span>
-                  </ListItem>
-                </NavLink>
-                <NavLink to="/interviews" activeClassName='kt-menu__item--active' className="kt-menu__item">
-                  <ListItem className="kt-menu__link w-100" >
-                    <i className='kt-menu__link-icon fa fa-handshake'/>
-                    <span className="kt-menu__link-text">Interviews</span>
-                  </ListItem>
-                </NavLink>
-                <NavLink to="/tests" activeClassName='kt-menu__item--active' className="kt-menu__item">
-                  <ListItem className="kt-menu__link w-100" >
-                    <i className='kt-menu__link-icon fa fa-check-double'/>
-                    <span className="kt-menu__link-text">Tests</span>
-                  </ListItem>
-                </NavLink>
-              </List>
+              {children}
             </div>
           </div>
         </div>
@@ -196,8 +126,7 @@ function AsideLeft({open, setOpen}) {
 
     </>
   );
-}
-
+};
 const mapStateToProps = store => ({
   disableAsideSelfDisplay:
     builder.selectors.getConfig(store, "aside.self.display") === false,
@@ -215,5 +144,4 @@ const mapStateToProps = store => ({
     }
   }
 });
-
-export default connect(mapStateToProps)(AsideLeft);
+export default connect(mapStateToProps)(AsideMain);

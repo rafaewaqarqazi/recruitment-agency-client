@@ -5,7 +5,7 @@ import Header from "./header/Header";
 import SubHeader from "./sub-header/SubHeader";
 import { withRouter } from "react-router-dom";
 import HeaderMobile from "./header/HeaderMobile";
-import AsideLeft from "./aside/AsideLeft";
+import AsideLeft from "./aside/AsideLeftAdmin";
 import ScrollTop from "../../app/partials/layout/ScrollTop";
 import HTMLClassService from "./HTMLClassService";
 import LayoutConfig from "./LayoutConfig";
@@ -21,61 +21,11 @@ import MainFooter from "../../app/Components/layout/main/MainFooter";
 import {makeStyles} from "@material-ui/styles";
 import clsx from "clsx";
 import Hidden from "@material-ui/core/Hidden";
+import {useLayoutStyles} from "../../utils/material-styles/layoutStyles";
 const htmlClassService = new HTMLClassService();
-const drawerWidth = 265;
-const useStyles = makeStyles(theme => ({
-  content: {
-    flexGrow: 1,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginTop: 20
-  },
-  contentShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  contentShiftLeft: {
-    width: `calc(100% - ${70}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  appBar: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 97,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  appBarShiftLeft: {
-    marginLeft: 70,
-    width: `calc(100% - ${70}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }
-}))
 
 function Layout({children, layoutConfig}) {
-  const classes = useStyles();
+  const classes = useLayoutStyles();
   const [open, setOpen] = useState(true)
   htmlClassService.setConfig(layoutConfig);
   // scroll to top after location changes

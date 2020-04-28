@@ -18,6 +18,7 @@ import * as routerHelpers from "../router/RouterHelpers";
 import AuthPage from "../pages/auth/AuthPage";
 import UserLayout from "../Components/layout/user/UserLayout";
 import ForgotPassword from "../pages/auth/ForgotPassword";
+import UserPages from "../pages/user/UserPages";
 
 export const Routes = withRouter(({ history }) => {
     const lastLocation = useLastLocation();
@@ -55,7 +56,7 @@ export const Routes = withRouter(({ history }) => {
                   </Layout>
                 ) : isUser ? (
                   <UserLayout >
-                    {/*<AdminPages userLastLocation={userLastLocation} />*/}
+                    <UserPages userLastLocation={userLastLocation} />
                   </UserLayout>
                 ) : (
                   /* Redirect to `/auth` when user is not authorized */

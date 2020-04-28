@@ -6,11 +6,16 @@ import {useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 
 const JobCard = ({job}) => {
-  const { isUser } = useSelector(
+  const { isUser, userId } = useSelector(
     ({ auth }) => ({
-      isUser: auth.user && auth.user.role === '1'
+      isUser: auth.user && auth.user.role === '1',
+      userId: auth.user && auth.user._id,
     })
   );
+  const handleClickApply = () => {
+    console.log('id', job._id)
+    console.log('userId', userId)
+  }
   return (
     <Portlet className=" kt-portlet--border-bottom-brand">
       <PortletHeader
@@ -42,7 +47,8 @@ const JobCard = ({job}) => {
 
           {
             isUser &&
-            <button className='btn btn-success btn-sm ml-3'>Apply</button>
+            // !moment().isAfter(job.dueDate) &&
+            <button className='btn btn-success btn-sm ml-3' onClick={handleClickApply}>Apply</button>
           }
 
         </div>

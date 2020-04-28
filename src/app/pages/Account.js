@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {connect} from "react-redux";
-import AccountAside from "../../Components/account/AccountAside";
-import AccountContent from "../../Components/account/AccountContent";
+import AccountAside from "../Components/account/AccountAside";
+import AccountContent from "../Components/account/AccountContent";
 
 const Account = () => {
   const [selected, setSelected] = useState(0)

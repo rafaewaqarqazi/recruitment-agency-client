@@ -2,19 +2,19 @@ import React from 'react';
 import {shallowEqual, useSelector} from "react-redux";
 import {Redirect, Route} from "react-router-dom";
 
-const AdminRoute = ({path, component: Component, ...rest}) => {
-  const { isAdmin } = useSelector(
+const UserRoute = ({path, component: Component, ...rest}) => {
+  const { isUser } = useSelector(
     ({ auth }) => ({
-      isAdmin: auth.user && auth.user.role === '2'
+      isUser: auth.user && auth.user.role === '1'
     }),
     shallowEqual
   );
   return (
     <Route {...rest} render={props => (
-      isAdmin ? <Component {...props}/> : <Redirect to="/auth/login" />
+      isUser ? <Component {...props}/> : <Redirect to="/auth/login" />
     )}/>
   )
 
 };
 
-export default AdminRoute;
+export default UserRoute;
