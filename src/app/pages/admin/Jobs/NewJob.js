@@ -33,7 +33,8 @@ const NewJob = ({ intl, addNewJob, jobsList, jobEdit }) => {
     type: "",
     dueDate: "",
     qualifications: [],
-    experience: ""
+    experience: "",
+    positions: ""
   }
   const response = ({res, setStatus}) => {
     if (!res.data.success) {

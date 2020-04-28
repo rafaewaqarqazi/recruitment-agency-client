@@ -44,7 +44,7 @@ export const Routes = withRouter(({ history }) => {
                     <AuthPage />
                 ) : (
                     /* Otherwise redirect to root page (`/`) */
-                    <Redirect from="/auth" to={userLastLocation} />
+                    <Redirect from="/auth" to='/' />
                 )}
 
                 <Route path="/error" component={ErrorsPage} />

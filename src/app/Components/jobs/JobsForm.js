@@ -100,7 +100,7 @@ const JobsForm = ({errors, values, setFieldValue, isSubmitting, loading, loading
         </Field>
         <span className="form-text text-muted">Please select experience</span>
       </div>
-      <div className="form-group col-12">
+      <div className="form-group col-6">
         <label>Qualification*</label>
         <ErrorMessage name='qualifications' render={formErrorMessage}/>
         <Field className="form-control" as='select' onChange={handleChangeQualification}>
@@ -111,6 +111,16 @@ const JobsForm = ({errors, values, setFieldValue, isSubmitting, loading, loading
             ))
           }
         </Field>
+        <span className="form-text text-muted">Please select job type</span>
+      </div>
+      <div className="form-group col-6">
+        <label>No of Positions*</label>
+        <ErrorMessage name='positions' render={formErrorMessage}/>
+        <Field as={
+          (props) => (
+            <input type="number" className="form-control" min={0} {...props}/>
+          )
+        } placeholder='Positions' name='positions'/>
         <span className="form-text text-muted">Please select job type</span>
       </div>
       <div className="form-group col-12">

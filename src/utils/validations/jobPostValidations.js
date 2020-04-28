@@ -1,4 +1,5 @@
 export const jobPostValidations = (values) => {
+  console.log('values', values)
   const errors = {};
   if (values.title.trim() === '') {
     errors.title = 'Title is Required!'
@@ -22,6 +23,9 @@ export const jobPostValidations = (values) => {
   }
   if (!values.experience) {
     errors.experience = 'Experience is Required!'
+  }
+  if (!values.positions || values.positions === 0) {
+    errors.positions = 'Positions is Required!'
   }
   if (values.qualifications.length === 0) {
     errors.qualifications = 'Qualifications is Required!'
