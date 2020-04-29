@@ -1,5 +1,4 @@
 export const jobPostValidations = (values) => {
-  console.log('values', values)
   const errors = {};
   if (values.title.trim() === '') {
     errors.title = 'Title is Required!'

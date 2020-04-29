@@ -12,7 +12,7 @@ import RegistrationWizardFormCredentials from "../../Components/registration/wiz
 import RegistrationWizardFormConfirm from "../../Components/registration/wizard/RegistrationWizardFormConfirm";
 import MainLayout from "../../Components/layout/main/MainLayout";
 import RegistrationHeader from "../../Components/layout/registration/RegistrationHeader";
-import { login, register } from "../../crud/auth.crud";
+import { register } from "../../crud/auth.crud";
 import { validateRegistration } from "../../../utils/validations/registrationValidations";
 import { useHistory } from "react-router-dom";
 import RegistrationWizardCv from "../../Components/registration/wizard/RegistrationWizardCV";

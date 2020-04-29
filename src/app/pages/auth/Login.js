@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
@@ -9,7 +9,6 @@ import { login } from "../../crud/auth.crud";
 import LoginLayout from "../../Components/layout/login/LoginLayout";
 
 function Login(props) {
-  const history = useHistory()
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
@@ -28,7 +27,7 @@ function Login(props) {
 
   return (
     <>
-      <LoginLayout heading="Sign to Suits">
+      <LoginLayout heading="Sign to Recruitment Agency">
         <Formik
           initialValues={{
             email: "",

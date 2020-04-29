@@ -36,3 +36,30 @@
     cursor: pointer;
   }
 }
+.date-picker{
+  border: 1px solid #e2e5ec !important;
+  div{
+
+    border-radius: 4px;
+    padding: 0.65rem 1rem;
+    color: #495057;
+    input{
+      padding: 0;
+      line-height: 1.5;
+      &:before{
+        content: none;
+      }
+      &:after{
+        content: none;
+      }
+    }
+  }
+  .MuiInput-underline{
+    &:before{
+      content: none;
+    }
+    &:after{
+      content: none;
+    }
+  }
+}

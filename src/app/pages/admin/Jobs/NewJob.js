@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Portlet, PortletBody} from "../../../partials/content/Portlet";
 import {Form, Formik} from "formik";
 import {injectIntl} from "react-intl";
@@ -31,7 +31,7 @@ const NewJob = ({ intl, addNewJob, jobsList, jobEdit }) => {
     description: "",
     department: "",
     type: "",
-    dueDate: "",
+    dueDate: new Date(),
     qualifications: [],
     experience: "",
     positions: ""
@@ -85,7 +85,6 @@ const NewJob = ({ intl, addNewJob, jobsList, jobEdit }) => {
             validate={jobPostValidations}
             onSubmit={(values, { setStatus, setSubmitting }) => {
               enableLoading();
-              console.log('values', values)
               history.location.pathname.includes('/jobs/edit')
               ? editJob(values)
                   .then(res => {

@@ -1,14 +1,5 @@
-import React, {useMemo, useState} from "react";
-import {shallowEqual, useSelector} from "react-redux";
-import {
-  Portlet,
-  PortletBody, PortletFooter,
-  PortletHeader,
-  PortletHeaderToolbar
-} from "../../partials/content/Portlet";
-import {Link} from "react-router-dom";
-import {departments, getDepartment, getExperience} from "../../../utils/job-post-data";
-import moment from "moment";
+import React, {useState} from "react";
+import {useSelector} from "react-redux";
 import JobCard from "../../Components/jobs/JobCard";
 import {Alert} from "react-bootstrap";
 

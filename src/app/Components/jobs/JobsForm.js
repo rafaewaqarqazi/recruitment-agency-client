@@ -1,11 +1,15 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment} from 'react';
 import {ErrorMessage, Field} from "formik";
 import {formErrorMessage} from "../../pages/errors/FormErrorMessage";
 import {categories, departments, experience, qualifications, types} from "../../../utils/job-post-data";
 import {Chip} from '@material-ui/core'
 import clsx from "clsx";
 import { useHistory } from "react-router-dom";
-const JobsForm = ({errors, values, setFieldValue, isSubmitting, loading, loadingButtonStyle}) => {
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { DatePicker } from "@material-ui/pickers";
+
+const JobsForm = ({values, setFieldValue, isSubmitting, loading, loadingButtonStyle}) => {
   const history = useHistory();
   const handleChangeQualification = event => {
     const value = [].slice
@@ -15,6 +19,9 @@ const JobsForm = ({errors, values, setFieldValue, isSubmitting, loading, loading
   }
   const handleDelete = (i) => {
     setFieldValue('qualifications', values.qualifications.filter((v, index) => index !== i))
+  }
+  const handleChangeDate = date => {
+    setFieldValue('dueDate', date)
   }
   return (
     <Fragment>
@@ -74,18 +81,23 @@ const JobsForm = ({errors, values, setFieldValue, isSubmitting, loading, loading
       <div className="form-group col-6">
         <label>Due Date*</label>
         <ErrorMessage name='dueDate' render={formErrorMessage}/>
-        <div className="input-group">
-          <Field as={
-            (props) => (
-              <input type="text" className="form-control" onFocus={(e) => e.currentTarget.type='date'} onBlur={(e) => e.currentTarget.type='text'}  {...props} />
-            )
-          } placeholder='Select Date' name='dueDate'/>
-          <div className="input-group-append">
-              <span className="input-group-text">
-                <span className='fa fa-calendar-check'/>
-              </span>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <div className="input-group">
+            <DatePicker
+              animateYearScrolling
+              disablePast
+              className='form-control date-picker'
+              value={values.dueDate}
+              onChange={handleChangeDate}
+            />
+            <div className="input-group-append">
+                <span className="input-group-text">
+                  <span className='fa fa-calendar-check'/>
+                </span>
+            </div>
           </div>
-        </div>
+        </MuiPickersUtilsProvider>
+
       </div>
       <div className="form-group col-6">
         <label>Experience*</label>

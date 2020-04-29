@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, Redirect, useParams} from "react-router-dom";
+import {Redirect, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../partials/content/Portlet";
 import {getCategory, getDepartment, getExperience, getQualification, getType} from "../../../utils/job-post-data";

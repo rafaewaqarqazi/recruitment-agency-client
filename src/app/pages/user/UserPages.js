@@ -1,10 +1,7 @@
 import React, {Suspense} from 'react';
 import {LayoutSplashScreen} from "../../../_metronic";
 import {Redirect, Switch} from "react-router-dom";
-import AdminRoute from "../../router/AdminRoute";
 import Dashboard from "../admin/Dashboard";
-import Jobs from "../admin/Jobs/Jobs";
-import NewJob from "../admin/Jobs/NewJob";
 import JobDetails from "../../Components/jobs/JobDetails";
 import Interviews from "../admin/Interviews";
 import Tests from "../admin/Tests";

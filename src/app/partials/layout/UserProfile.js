@@ -8,7 +8,7 @@ import HeaderDropdownToggle from "../content/CustomDropdowns/HeaderDropdownToggl
 
 class UserProfile extends React.Component {
   render() {
-    const { user, showHi, showAvatar, showBadge } = this.props;
+    const { user } = this.props;
 
     return (
       <Dropdown

@@ -17,8 +17,6 @@ import '../../_metronic/_assets/sass/global/layout/header/skins/base/light.scss'
 import '../../_metronic/_assets/sass/global/layout/header/skins/menu/light.scss'
 import '../../_metronic/_assets/sass/global/layout/brand/skins/dark.scss'
 import '../../_metronic/_assets/sass/global/layout/aside/skins/dark.scss'
-import MainFooter from "../../app/Components/layout/main/MainFooter";
-import {makeStyles} from "@material-ui/styles";
 import clsx from "clsx";
 import Hidden from "@material-ui/core/Hidden";
 import {useLayoutStyles} from "../../utils/material-styles/layoutStyles";
