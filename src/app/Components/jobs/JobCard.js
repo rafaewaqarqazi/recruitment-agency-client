@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import {Modal} from "react-bootstrap";
 import {applyForJob} from "../../crud/job.crud";
 import * as job from "../../store/ducks/jobs.duck";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const JobCard = ({job, setSuccess, setError, jobEdit}) => {
   const { isUser, userId } = useSelector(
@@ -64,6 +65,15 @@ const JobCard = ({job, setSuccess, setError, jobEdit}) => {
               <span>{getExperience(job.experience)}</span>
             </div>
             <div className='d-flex justify-content-between'>
+              <span className='font-weight-bold'>Posted On:</span>
+              <Tooltip title={moment(job.postedOn).calendar(null, {
+                lastWeek: '[Last] dddd [at] h:mm A',
+                sameElse: 'D MMMM YYYY [at] h:mm A'
+              })} placement="top">
+                <span>{moment(job.postedOn).fromNow()}</span>
+              </Tooltip>
+            </div>
+            <div className='d-flex justify-content-between'>
               <span className='font-weight-bold'>Expire Date:</span>
               <span>{moment(job.dueDate).format('DD-MMM-YYYY')}</span>
             </div>
@@ -82,9 +92,16 @@ const JobCard = ({job, setSuccess, setError, jobEdit}) => {
 
             {
               isUser &&
-              !moment().isAfter(job.dueDate) &&
-                job.applications && job.applications.filter(app => app === userId).length === 0 &&
-              <button className='btn btn-success btn-sm ml-3' onClick={handleShow}>Apply</button>
+                <button
+                  className={`btn btn-${moment().isAfter(job.dueDate) ? 'danger' : 'success'} btn-sm ml-3`}
+                  onClick={handleShow}
+                  disabled={
+                    moment().isAfter(job.dueDate) ||
+                    job.applications.filter(app => app === userId).length > 0
+                  }
+                >
+                  Apply
+                </button>
             }
 
           </div>

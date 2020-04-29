@@ -4,13 +4,15 @@ import {useSelector} from "react-redux";
 import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../partials/content/Portlet";
 import {getCategory, getDepartment, getExperience, getQualification, getType} from "../../../utils/job-post-data";
 import moment from "moment";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const JobDetails = () => {
   const params = useParams();
-  const { jobsList, isUser } = useSelector(
+  const { jobsList, isUser, userId } = useSelector(
     ({ jobs: {jobsList}, auth }) => ({
       jobsList,
-      isUser: auth.user && auth.user.role === '1'
+      isUser: auth.user && auth.user.role === '1',
+      userId: auth.user && auth.user._id
     })
   );
   const job = params.jobId ?
@@ -33,8 +35,15 @@ const JobDetails = () => {
                     ? <span className='btn btn-label-danger btn-sm btn-bold'>Expired</span>
                     : <span className='btn btn-label-success btn-sm btn-bold'>Active</span>
                 }</div>
+                <div>
+                  {
+                    job.applications.filter(app => app === userId).length > 0 &&
+                      <span className='btn btn-label-success btn-sm btn-bold ml-3'>Applied</span>
+                  }
+                </div>
                 {
                   isUser && !moment().isAfter(job.dueDate) &&
+                    job.applications.filter(app => app === userId).length === 0 &&
                   <button className='btn btn-label btn-bold btn-sm ml-3'>
                     Apply
                   </button>
@@ -79,7 +88,12 @@ const JobDetails = () => {
                 </div>
                 <div className='d-flex justify-content-between mb-3'>
                   <span className='font-weight-bold'>Posted On:</span>
-                  <span>{moment(job.postedOn).format('DD-MMM-YYYY')}</span>
+                  <Tooltip title={moment(job.postedOn).calendar(null, {
+                    lastWeek: '[Last] dddd [at] h:mm A',
+                    sameElse: 'D MMMM YYYY [at] h:mm A'
+                  })} placement="top">
+                    <span>{moment(job.postedOn).fromNow()}</span>
+                  </Tooltip>
                 </div>
                 <div className='d-flex justify-content-between mb-3'>
                   <span className='font-weight-bold'>Expire Date:</span>
