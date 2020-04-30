@@ -5,6 +5,7 @@ import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../p
 import {getCategory, getDepartment, getExperience, getQualification, getType} from "../../../utils/job-post-data";
 import moment from "moment";
 import Tooltip from "@material-ui/core/Tooltip";
+import {canApply} from "../../../utils";
 
 const JobDetails = () => {
   const params = useParams();
@@ -37,13 +38,13 @@ const JobDetails = () => {
                 }</div>
                 <div>
                   {
-                    job.applications.filter(app => app === userId).length > 0 &&
+                    canApply(job, userId) &&
                       <span className='btn btn-label-success btn-sm btn-bold ml-3'>Applied</span>
                   }
                 </div>
                 {
                   isUser && !moment().isAfter(job.dueDate) &&
-                    job.applications.filter(app => app === userId).length === 0 &&
+                    canApply(job, userId) &&
                   <button className='btn btn-label btn-bold btn-sm ml-3'>
                     Apply
                   </button>

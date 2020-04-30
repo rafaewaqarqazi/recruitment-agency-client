@@ -8,6 +8,7 @@ import {Modal} from "react-bootstrap";
 import {applyForJob} from "../../crud/job.crud";
 import * as job from "../../store/ducks/jobs.duck";
 import Tooltip from "@material-ui/core/Tooltip";
+import {canApply} from "../../../utils";
 
 const JobCard = ({job, setSuccess, setError, jobEdit}) => {
   const { isUser, userId } = useSelector(
@@ -97,7 +98,7 @@ const JobCard = ({job, setSuccess, setError, jobEdit}) => {
                   onClick={handleShow}
                   disabled={
                     moment().isAfter(job.dueDate) ||
-                    job.applications.filter(app => app === userId).length > 0
+                    canApply(job, userId)
                   }
                 >
                   Apply

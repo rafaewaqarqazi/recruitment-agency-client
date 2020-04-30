@@ -21,6 +21,12 @@ function AsideLeftAdmin({open, setOpen}) {
             <span className="kt-menu__link-text">Jobs</span>
           </ListItem>
         </NavLink>
+        <NavLink to="/applications" activeClassName='kt-menu__item--active' className="kt-menu__item">
+          <ListItem className="kt-menu__link w-100" >
+            <i className='kt-menu__link-icon fa fa-book'/>
+            <span className="kt-menu__link-text">Applications</span>
+          </ListItem>
+        </NavLink>
         <NavLink to="/interviews" activeClassName='kt-menu__item--active' className="kt-menu__item">
           <ListItem className="kt-menu__link w-100" >
             <i className='kt-menu__link-icon fa fa-handshake'/>

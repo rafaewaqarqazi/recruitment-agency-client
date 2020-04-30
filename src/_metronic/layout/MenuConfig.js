@@ -17,6 +17,13 @@ export default {
         page: "jobs"
       },
       {
+        title: "Applications",
+        root: true,
+        alignment: "left",
+        toggle: "click",
+        page: "applications"
+      },
+      {
         title: "New Job",
         root: true,
         alignment: "left",
@@ -61,6 +68,12 @@ export default {
         root: true,
         icon: "flaticon2-expand",
         page: "interviews"
+      },
+      {
+        title: "Applications",
+        root: true,
+        icon: "flaticon2-expand",
+        page: "applicaions"
       },
       {
         title: "Tests",
