@@ -27,8 +27,10 @@ export default function AdminPages() {
         <AdminRoute path="/jobs/details/:jobId" component={JobDetails} exact/>
         <AdminRoute path="/applications" component={Applications} exact/>
         <AdminRoute path="/applications/:jobId" component={ApplicationsSingle} exact/>
-        <AdminRoute path="/interviews" component={Interviews} exact/>
-        <AdminRoute path="/tests" component={Tests} exact/>
+        <AdminRoute path="/interviews" component={Applications} exact/>
+        <AdminRoute path="/interviews/:jobId" component={Interviews} exact/>
+        <AdminRoute path="/tests" component={Applications} exact/>
+        <AdminRoute path="/tests/:jobId" component={Tests} exact/>
         <AdminRoute path="/account" component={Account} exact/>
         <Redirect to="/error/error-v1" />
       </Switch>

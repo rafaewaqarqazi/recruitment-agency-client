@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Modal, Table} from "react-bootstrap";
 import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../../partials/content/Portlet";
-import {Link, useHistory, useParams} from "react-router-dom";
-import {categories, departments, types} from "../../../../utils/job-post-data";
-import moment from "moment";
-import {Tooltip} from "@material-ui/core";
-import {scheduleTest} from "../../../crud/job.crud";
+import {useHistory, useParams} from "react-router-dom";
+import {scheduleTestInterview} from "../../../crud/job.crud";
 import {connect} from "react-redux";
 import * as job from "../../../store/ducks/jobs.duck";
 import DateFnsUtils from "@date-io/date-fns";
 import {DateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import {getStatus} from "../../../../utils";
 
 const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const history = useHistory()
@@ -17,7 +15,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const [show, setShow] = useState(false);
   const [job, setJob] = useState(false);
   const [applications, setApplications] = useState([]);
-  const [testDate, handleChangeTestDate] = useState(new Date())
+  const [date, handleChangeDate] = useState(new Date())
   const [error, setError] = useState({show: false, message: ''});
   const [success, setSuccess] = useState({show: false, message: ''});
   const [selectAll, setSelectAll] = useState(false);
@@ -58,7 +56,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const handleScheduleTest = () => {
     const applicationsIds = applications.filter(application => application.checked)
       .map(app => app._id)
-    scheduleTest({applicationsIds, jobId: job._id, testDate})
+    scheduleTestInterview({applicationsIds, jobId: job._id, date, type: 'test', status: '2'})
       .then(res => {
         if (!res.data.success) {
           setError({show: true, message: res.data.message})
@@ -101,6 +99,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
               <th>Last Name</th>
               <th>Email</th>
               <th>CV</th>
+              <th>Status</th>
             </tr>
             </thead>
             <tbody>
@@ -110,15 +109,14 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
                   <td colSpan={5} style={{textAlign: 'center'}}>No Applications Found</td>
                 </tr>
                 : applications.map((application, i) => (
-                  <Tooltip title='Click to view Applications' placement='top'>
-                    <tr key={i}>
-                      <td><input type="checkbox" className='form-check' disabled={application.status !== '1'} checked={application.checked} onChange={() => onCheckSingle(application._id)}/></td>
-                      <td>{application.user.firstName}</td>
-                      <td>{application.user.lastName}</td>
-                      <td>{application.user.email}</td>
-                      <td>{application.user.cv ? application.cv.filename : 'Not Provided'}</td>
-                    </tr>
-                  </Tooltip>
+                  <tr key={i}>
+                    <td><input type="checkbox" className='form-check' disabled={application.status !== '1'} checked={application.checked} onChange={() => onCheckSingle(application._id)}/></td>
+                    <td>{application.user.firstName}</td>
+                    <td>{application.user.lastName}</td>
+                    <td>{application.user.email}</td>
+                    <td>{application.user.cv ? application.cv.filename : 'Not Provided'}</td>
+                    <td>{getStatus(application.status)}</td>
+                  </tr>
                 ))
             }
             </tbody>
@@ -136,8 +134,8 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
                 animateYearScrolling
                 disablePast
                 className='form-control date-picker'
-                value={testDate}
-                onChange={handleChangeTestDate}
+                value={date}
+                onChange={handleChangeDate}
               />
               <div className="input-group-append">
                 <span className="input-group-text">
@@ -151,7 +149,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
           <button className='btn btn-primary btn-sm' onClick={handleClose}>
             Close
           </button>
-          <button className='btn btn-danger btn-sm' onClick={handleScheduleTest}>
+          <button className='btn btn-success btn-sm' onClick={handleScheduleTest}>
             Confirm
           </button>
         </Modal.Footer>
