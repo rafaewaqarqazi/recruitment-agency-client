@@ -8,6 +8,7 @@ import * as job from "../../../store/ducks/jobs.duck";
 import DateFnsUtils from "@date-io/date-fns";
 import {DateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import {getStatus} from "../../../../utils";
+import PaginationComponent from "../../../Components/PaginationComponent";
 
 const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const history = useHistory()
@@ -23,17 +24,33 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const handleShow = () => {
     setShow(true);
   }
+  const [perPage, setPerPage] = useState(10);
+  const [pageNo, setPageNo] = useState(1);
+  const [applicationsInPage, setApplicationsInPage] = useState([])
+  const handlePageChange = (pageNumber) => {
+    setPageNo(pageNumber);
+    getPageData(applications, pageNumber, perPage)
+  };
+  const getPageData = (data, pageNumber, perPageN) => {
+    setApplicationsInPage(data.slice((pageNumber - 1) * perPageN, ((pageNumber - 1) * perPageN) + perPageN <= data.length ? ((pageNumber - 1) * perPageN) + perPageN : data.length))
+  }
+  const handlePerPageChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    getPageData(applications, pageNo, newPerPage)
+  };
   useEffect(() => {
     const data = jobsList.filter(job => job._id === params.jobId)
     if (data.length === 0) {
       history.push('/applications')
     } else {
       setJob(data[0])
-      setApplications(data[0].applications.map(app => ({...app, checked: false})))
+      const dataN = data[0].applications.map(app => ({...app, checked: false}))
+      setApplications(dataN)
+      getPageData(dataN, pageNo, perPage)
     }
   }, [jobsList])
   const onCheckAll = () => {
-    setApplications(applications.map(application => {
+    setApplicationsInPage(applicationsInPage.map(application => {
       return {...application, checked: application.status === '1' ? !selectAll : false}
     }))
     setSelectAll(!selectAll)
@@ -45,7 +62,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
     }, 3000)
   }
   const onCheckSingle = id => {
-    setApplications(applications.map(application => {
+    setApplicationsInPage(applicationsInPage.map(application => {
       if (application._id === id) {
         return {...application, checked: !application.checked}
       } else {
@@ -54,7 +71,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
     }))
   }
   const handleScheduleTest = () => {
-    const applicationsIds = applications.filter(application => application.checked)
+    const applicationsIds = applicationsInPage.filter(application => application.checked)
       .map(app => app._id)
     scheduleTestInterview({applicationsIds, jobId: job._id, date, type: 'test', status: '2'})
       .then(res => {
@@ -84,7 +101,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
           title={`${job.title} Applications`}
           toolbar={
             <PortletHeaderToolbar>
-              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={applications.filter(app => app.checked).length === 0}>
+              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={applicationsInPage.filter(app => app.checked).length === 0}>
                 <i className='fa fa-clock'/> Schedule Test
               </button>
             </PortletHeaderToolbar>
@@ -104,11 +121,11 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
             </thead>
             <tbody>
             {
-              applications.length === 0
+              applicationsInPage.length === 0
                 ? <tr >
                   <td colSpan={5} style={{textAlign: 'center'}}>No Applications Found</td>
                 </tr>
-                : applications.map((application, i) => (
+                : applicationsInPage.map((application, i) => (
                   <tr key={i}>
                     <td><input type="checkbox" className='form-check' disabled={application.status !== '1'} checked={application.checked} onChange={() => onCheckSingle(application._id)}/></td>
                     <td>{application.user.firstName}</td>
@@ -121,6 +138,13 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
             }
             </tbody>
           </Table>
+          <PaginationComponent
+            pageNo={pageNo}
+            perPage={perPage}
+            handlePageChange={handlePageChange}
+            handlePerPageChange={handlePerPageChange}
+            total={applications.length}
+          />
         </PortletBody>
       </Portlet>
       <Modal show={show} onHide={handleClose} centered>

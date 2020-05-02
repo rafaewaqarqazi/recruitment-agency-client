@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../../partials/content/Portlet";
 import {Modal, Table, Alert} from 'react-bootstrap'
 import {Link} from "react-router-dom";
@@ -8,12 +8,30 @@ import moment from 'moment'
 import {Tooltip} from "@material-ui/core";
 import {deleteJob} from "../../../crud/job.crud";
 import * as job from "../../../store/ducks/jobs.duck";
+import PaginationComponent from "../../../Components/PaginationComponent";
 
 const Jobs = ({jobsList, removeJob}) => {
   const [show, setShow] = useState(false);
   const [jobId, setJobId] = useState('');
   const [error, setError] = useState({show: false, message: ''});
   const [success, setSuccess] = useState({show: false, message: ''});
+  const [perPage, setPerPage] = useState(10);
+  const [pageNo, setPageNo] = useState(1);
+  const [jobsInPage, setJobsInPage] = useState([])
+  useEffect(() => {
+    getPageData()
+  }, [])
+  const handlePageChange = (pageNumber) => {
+    setPageNo(pageNumber);
+    getPageData()
+  };
+  const getPageData = () => {
+   setJobsInPage(jobsList.slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= jobsList.length ? ((pageNo - 1) * perPage) + perPage : jobsList.length))
+  }
+  const handlePerPageChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    getPageData()
+  };
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
     setJobId(id)
@@ -82,7 +100,7 @@ const Jobs = ({jobsList, removeJob}) => {
                 ? <tr >
                   <td colSpan={8} style={{textAlign: 'center'}}>No Jobs Found</td>
                 </tr>
-                : jobsList.map((job, i) => (
+                : jobsInPage.map((job, i) => (
                 <tr key={i}>
                   <td>{i+1}</td>
                   <td>{job.title}</td>
@@ -106,6 +124,13 @@ const Jobs = ({jobsList, removeJob}) => {
             }
             </tbody>
           </Table>
+          <PaginationComponent
+            pageNo={pageNo}
+            perPage={perPage}
+            handlePageChange={handlePageChange}
+            handlePerPageChange={handlePerPageChange}
+            total={jobsList.length}
+          />
         </PortletBody>
       </Portlet>
       <Modal show={show} onHide={handleClose} centered>

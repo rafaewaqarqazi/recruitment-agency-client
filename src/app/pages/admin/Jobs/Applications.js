@@ -11,10 +11,28 @@ import * as job from "../../../store/ducks/jobs.duck";
 import DateFnsUtils from "@date-io/date-fns";
 import {DateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import {getShortListedInterviews, getShortListedTest} from "../../../../utils";
+import PaginationComponent from "../../../Components/PaginationComponent";
 
 const Applications = ({jobsList}) => {
   const history = useHistory()
   const path = history.location.pathname.split('/')[1]
+  const [perPage, setPerPage] = useState(10);
+  const [pageNo, setPageNo] = useState(1);
+  const [jobsInPage, setJobsInPage] = useState([])
+  useEffect(() => {
+    getPageData()
+  }, [])
+  const handlePageChange = (pageNumber) => {
+    setPageNo(pageNumber);
+    getPageData()
+  };
+  const getPageData = () => {
+    setJobsInPage(jobsList.slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= jobsList.length ? ((pageNo - 1) * perPage) + perPage : jobsList.length))
+  }
+  const handlePerPageChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    getPageData()
+  };
   return (
     <div>
       <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
@@ -49,7 +67,7 @@ const Applications = ({jobsList}) => {
                 ? <tr >
                   <td colSpan={path === 'tests' ? 9 : path === 'interviews' ? 10 : 8} style={{textAlign: 'center'}}>No Jobs Found</td>
                 </tr>
-                : jobsList.map((job, i) => (
+                : jobsInPage.map((job, i) => (
                   <Tooltip title='Click to view Applications' placement='top' key={i}>
                     <tr key={i} onClick={() => history.push(`/${path}/${job._id}`)} className='application-table__row'>
                       <td>{i+1}</td>
@@ -74,6 +92,13 @@ const Applications = ({jobsList}) => {
             }
             </tbody>
           </Table>
+          <PaginationComponent
+            pageNo={pageNo}
+            perPage={perPage}
+            handlePageChange={handlePageChange}
+            handlePerPageChange={handlePerPageChange}
+            total={jobsList.length}
+          />
         </PortletBody>
       </Portlet>
     </div>

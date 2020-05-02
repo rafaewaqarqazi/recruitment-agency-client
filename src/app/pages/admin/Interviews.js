@@ -10,6 +10,7 @@ import {DateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import {getTestInterviewStatus} from "../../../utils";
 import {Tooltip} from "@material-ui/core";
 import moment from "moment";
+import PaginationComponent from "../../Components/PaginationComponent";
 
 const Interviews = ({jobsList, jobEdit}) => {
   const history = useHistory()
@@ -23,6 +24,20 @@ const Interviews = ({jobsList, jobEdit}) => {
   const [success, setSuccess] = useState({show: false, message: ''});
   const [selectAll, setSelectAll] = useState(false);
   const [statusData, setStatusData] = useState({applicationId: '', status: ''})
+  const [perPage, setPerPage] = useState(10);
+  const [pageNo, setPageNo] = useState(1);
+  const [applicationsInPage, setApplicationsInPage] = useState([])
+  const handlePageChange = (pageNumber) => {
+    setPageNo(pageNumber);
+    getPageData(applications, pageNumber, perPage)
+  };
+  const getPageData = (data, pageNumber, perPageN) => {
+    setApplicationsInPage(data.slice((pageNumber - 1) * perPageN, ((pageNumber - 1) * perPageN) + perPageN <= data.length ? ((pageNumber - 1) * perPageN) + perPageN : data.length))
+  }
+  const handlePerPageChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    getPageData(applications, pageNo, newPerPage)
+  };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleCloseStatus = () => setShowStatus(false);
@@ -36,11 +51,13 @@ const Interviews = ({jobsList, jobEdit}) => {
       history.push('/applications')
     } else {
       setJob(data[0])
-      setApplications(data[0].applications.filter(app => app.interview).map(app => ({...app, checked: false})))
+      const dataN = data[0].applications.filter(app => app.interview).map(app => ({...app, checked: false}))
+      setApplications(dataN)
+      getPageData(dataN, pageNo, perPage)
     }
   }, [jobsList])
   const onCheckAll = () => {
-    setApplications(applications.map(application => {
+    setApplicationsInPage(applicationsInPage.map(application => {
       return {...application, checked: application.status === '3' && application.interview.status === '2' ? !selectAll : false}
     }))
     setSelectAll(!selectAll)
@@ -52,7 +69,7 @@ const Interviews = ({jobsList, jobEdit}) => {
     }, 3000)
   }
   const onCheckSingle = id => {
-    setApplications(applications.map(application => {
+    setApplicationsInPage(applicationsInPage.map(application => {
       if (application._id === id) {
         return {...application, checked: !application.checked}
       } else {
@@ -61,7 +78,7 @@ const Interviews = ({jobsList, jobEdit}) => {
     }))
   }
   const handleSelectCandidate = () => {
-    const applicationsIds = applications.filter(application => application.checked)
+    const applicationsIds = applicationsInPage.filter(application => application.checked)
       .map(app => app._id)
     selectRejectCandidate({applicationsIds, jobId: job._id, status: '4'})
       .then(res => {
@@ -111,7 +128,7 @@ const Interviews = ({jobsList, jobEdit}) => {
           title={`${job.title} Applications`}
           toolbar={
             <PortletHeaderToolbar>
-              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={applications.filter(app => app.checked).length === 0}>
+              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={applicationsInPage.filter(app => app.checked).length === 0}>
                 <i className='fa fa-clock'/> Select Candidates
               </button>
             </PortletHeaderToolbar>
@@ -121,7 +138,7 @@ const Interviews = ({jobsList, jobEdit}) => {
           <Table responsive>
             <thead>
             <tr>
-              <th><input type="checkbox" className='form-check' disabled={applications.filter(app => app.interview.status === '2').length === 0} checked={selectAll} onChange={onCheckAll}/></th>
+              <th><input type="checkbox" className='form-check' disabled={applicationsInPage.filter(app => app.interview.status === '2').length === 0} checked={selectAll} onChange={onCheckAll}/></th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
@@ -133,11 +150,11 @@ const Interviews = ({jobsList, jobEdit}) => {
             </thead>
             <tbody>
             {
-              applications.length === 0
+              applicationsInPage.length === 0
                 ? <tr >
                   <td colSpan={8} style={{textAlign: 'center'}}>No Applications Found</td>
                 </tr>
-                : applications.map((application, i) => (
+                : applicationsInPage.map((application, i) => (
                   <tr key={i}>
                     <td><input type="checkbox" className='form-check' disabled={application.interview.status !== '2' || parseInt(application.status) > 3} checked={application.checked} onChange={() => onCheckSingle(application._id)}/></td>
                     <td>{application.user.firstName}</td>
@@ -167,6 +184,13 @@ const Interviews = ({jobsList, jobEdit}) => {
             }
             </tbody>
           </Table>
+          <PaginationComponent
+            pageNo={pageNo}
+            perPage={perPage}
+            handlePageChange={handlePageChange}
+            handlePerPageChange={handlePerPageChange}
+            total={applications.length}
+          />
         </PortletBody>
       </Portlet>
       <Modal show={show} onHide={handleClose} centered>
