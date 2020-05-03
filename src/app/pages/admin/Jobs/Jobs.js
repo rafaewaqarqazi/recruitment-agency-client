@@ -19,18 +19,18 @@ const Jobs = ({jobsList, removeJob}) => {
   const [pageNo, setPageNo] = useState(1);
   const [jobsInPage, setJobsInPage] = useState([])
   useEffect(() => {
-    getPageData()
+    getPageData(pageNo, perPage)
   }, [])
   const handlePageChange = (pageNumber) => {
     setPageNo(pageNumber);
-    getPageData()
+    getPageData(pageNumber, perPage)
   };
-  const getPageData = () => {
-   setJobsInPage(jobsList.slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= jobsList.length ? ((pageNo - 1) * perPage) + perPage : jobsList.length))
+  const getPageData = (pageNumber, pPage) => {
+   setJobsInPage(jobsList.slice((pageNumber - 1) * pPage, ((pageNumber - 1) * pPage) + pPage <= jobsList.length ? ((pageNumber - 1) * pPage) + pPage : jobsList.length))
   }
   const handlePerPageChange = (newPerPage) => {
     setPerPage(newPerPage);
-    getPageData()
+    getPageData(pageNo, newPerPage)
   };
   const handleClose = () => setShow(false);
   const handleShow = (id) => {

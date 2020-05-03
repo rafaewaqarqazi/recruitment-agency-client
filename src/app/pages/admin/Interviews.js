@@ -5,8 +5,6 @@ import {useHistory, useParams} from "react-router-dom";
 import {selectRejectCandidate, changeTestInterviewStatus} from "../../crud/job.crud";
 import {connect} from "react-redux";
 import * as job from "../../store/ducks/jobs.duck";
-import DateFnsUtils from "@date-io/date-fns";
-import {DateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import {getTestInterviewStatus} from "../../../utils";
 import {Tooltip} from "@material-ui/core";
 import moment from "moment";
@@ -19,7 +17,6 @@ const Interviews = ({jobsList, jobEdit}) => {
   const [showStatus, setShowStatus] = useState(false);
   const [job, setJob] = useState(false);
   const [applications, setApplications] = useState([]);
-  const [date, handleChangeDate] = useState(new Date())
   const [error, setError] = useState({show: false, message: ''});
   const [success, setSuccess] = useState({show: false, message: ''});
   const [selectAll, setSelectAll] = useState(false);
@@ -80,24 +77,31 @@ const Interviews = ({jobsList, jobEdit}) => {
   const handleSelectCandidate = () => {
     const applicationsIds = applicationsInPage.filter(application => application.checked)
       .map(app => app._id)
-    selectRejectCandidate({applicationsIds, jobId: job._id, status: '4'})
-      .then(res => {
-        if (!res.data.success) {
-          setError({show: true, message: res.data.message})
+    const selectedLength = applicationsInPage.filter(app => app.status === '4').length
+    if (applicationsIds.length + selectedLength <= parseInt(job.positions)) {
+      selectRejectCandidate({applicationsIds, jobId: job._id, status: '4'})
+        .then(res => {
+          if (!res.data.success) {
+            setError({show: true, message: res.data.message})
+            handleClose()
+            closeAlert()
+          } else {
+            setSuccess({show: true, message: res.data.message})
+            handleClose()
+            jobEdit(res.data.job)
+            closeAlert()
+          }
+        })
+        .catch(error => {
+          setError({show: true, message: 'Could not perform this action'})
           handleClose()
           closeAlert()
-        } else {
-          setSuccess({show: true, message: res.data.message})
-          handleClose()
-          jobEdit(res.data.job)
-          closeAlert()
-        }
-      })
-      .catch(error => {
-        setError({show: true, message: 'Could not perform this action'})
-        handleClose()
-        closeAlert()
-      })
+        })
+    } else {
+      setError({show: true, message: 'Number of positions exceeds!'})
+      handleClose()
+      closeAlert()
+    }
   }
   const handleChangeStatus = () => {
     changeTestInterviewStatus({jobId: job._id, type: 'interview', ...statusData})
@@ -119,6 +123,16 @@ const Interviews = ({jobsList, jobEdit}) => {
         closeAlert()
       })
   }
+  const isDisabled = () => {
+    const checkedLength = applicationsInPage.filter(app => app.checked).length
+    const selectedLength = applicationsInPage.filter(app => app.status === '4').length
+    if (checkedLength === 0) {
+      return true
+    } else if (selectedLength === parseInt(job.position)) {
+      return true
+    } else return false
+
+  }
   return (
     <div>
       <Alert show={success.show} variant="success">{success.message}</Alert>
@@ -128,7 +142,7 @@ const Interviews = ({jobsList, jobEdit}) => {
           title={`${job.title} Applications`}
           toolbar={
             <PortletHeaderToolbar>
-              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={applicationsInPage.filter(app => app.checked).length === 0}>
+              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={isDisabled()}>
                 <i className='fa fa-clock'/> Select Candidates
               </button>
             </PortletHeaderToolbar>
