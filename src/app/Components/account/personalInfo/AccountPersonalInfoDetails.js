@@ -18,10 +18,6 @@ const AccountPersonalInfoDetails = ({user}) => {
               <div className="col-lg-9 col-xl-6">
                 <div className="kt-avatar kt-avatar--outline">
                   <img src={img ? img : "/media/users/100_13.jpg"} alt="" className="kt-avatar__holder"/>
-                  <label className="kt-avatar__upload">
-                    <i className="fa fa-pen" />
-                    <input type="file" name="profile_avatar" accept="image/*" onChange={handleChangeProfile}/>
-                  </label>
                 </div>
               </div>
             </div>

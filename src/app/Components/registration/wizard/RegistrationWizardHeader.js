@@ -23,12 +23,20 @@ const RegistrationWizardHeader = ({current}) => {
         <div className="kt-wizard-v3__nav-item" data-ktwizard-type="step" data-ktwizard-state={current === 2 && "current"}>
           <div className="kt-wizard-v3__nav-body">
             <div className="kt-wizard-v3__nav-label">
-              <span>3</span> Upload CV
+              <span>2</span> Address
             </div>
             <div className="kt-wizard-v3__nav-bar"/>
           </div>
         </div>
         <div className="kt-wizard-v3__nav-item" data-ktwizard-type="step" data-ktwizard-state={current === 3 && "current"}>
+          <div className="kt-wizard-v3__nav-body">
+            <div className="kt-wizard-v3__nav-label">
+              <span>3</span> Upload CV
+            </div>
+            <div className="kt-wizard-v3__nav-bar"/>
+          </div>
+        </div>
+        <div className="kt-wizard-v3__nav-item" data-ktwizard-type="step" data-ktwizard-state={current === 4 && "current"}>
           <div className="kt-wizard-v3__nav-body">
             <div className="kt-wizard-v3__nav-label">
               <span>4</span> Confirmation

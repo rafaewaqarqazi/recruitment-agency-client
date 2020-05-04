@@ -19,6 +19,12 @@ const RegistrationWizardFormPInfo = ({errors}) => {
         <Field className="form-control" name="lastName" placeholder="Last Name" required/>
         <span className="form-text text-muted">Please enter your Last Name</span>
       </div>
+      <div className="form-group">
+        <label>Mobile No*</label>
+        {formErrorMessage(errors.mobileNo)}
+        <Field className="form-control" name="mobileNo" placeholder="03XXXXXXXXX" required/>
+        <span className="form-text text-muted">Please enter your Mobile Number</span>
+      </div>
     </RegistrationWizardContent>
   );
 };

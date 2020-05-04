@@ -28,7 +28,7 @@ const AccountAside = ({ selected, setSelected, user }) => {
                 </div>
                 <div className="kt-widget__info">
                   <span className="kt-widget__label">Phone:</span>
-                  <span className="kt-widget__data">{user.phone}</span>
+                  <span className="kt-widget__data">{user.mobileNo}</span>
                 </div>
                 <div className="kt-widget__info">
                   <span className="kt-widget__label">Location:</span>

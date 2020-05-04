@@ -16,6 +16,7 @@ import { register } from "../../crud/auth.crud";
 import { validateRegistration } from "../../../utils/validations/registrationValidations";
 import { useHistory } from "react-router-dom";
 import RegistrationWizardCv from "../../Components/registration/wizard/RegistrationWizardCV";
+import RegistrationWirzardFormAddress from "../../Components/registration/wizard/RegistrationWirzardFormAddress";
 function Registration({ intl }) {
   const history = useHistory();
   const [current, setCurrent] = useState(0);
@@ -44,7 +45,10 @@ function Registration({ intl }) {
               lastName: "",
               email: "",
               password: "",
+              address: "",
+              country: "",
               confirmPassword: "",
+              mobileNo: "",
               cv: null,
               agree: ""
             }}
@@ -132,9 +136,12 @@ function Registration({ intl }) {
                         <RegistrationWizardFormCredentials errors={errors} />
                       )}
                       {current === 2 && (
-                        <RegistrationWizardCv errors={errors} setFieldValue={setFieldValue} values={values}/>
+                        <RegistrationWirzardFormAddress errors={errors} />
                       )}
                       {current === 3 && (
+                        <RegistrationWizardCv errors={errors} setFieldValue={setFieldValue} values={values}/>
+                      )}
+                      {current === 4 && (
                         <RegistrationWizardFormConfirm errors={errors} />
                       )}
                       <RegistrationWizardActions
