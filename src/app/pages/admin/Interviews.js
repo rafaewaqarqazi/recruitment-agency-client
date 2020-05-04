@@ -128,8 +128,8 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
       })
   }
   const isDisabled = () => {
-    const checkedLength = applicationsInPage.filter(app => app.checked).length
-    const selectedLength = applicationsInPage.filter(app => app.status === '4').length
+    const checkedLength = filteredData.filter(app => app.checked).length
+    const selectedLength = filteredData.filter(app => app.status === '4').length
     if (checkedLength === 0) {
       return true
     } else if (selectedLength === parseInt(job.position)) {
