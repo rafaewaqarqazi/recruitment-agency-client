@@ -8,30 +8,38 @@ import {Tooltip} from "@material-ui/core";
 import {connect} from "react-redux";
 import {getShortListedInterviews, getShortListedTest} from "../../../../utils";
 import PaginationComponent from "../../../Components/PaginationComponent";
+import Filters from "../../../Components/Filters";
 
 const Applications = ({jobsList}) => {
   const history = useHistory()
   const path = history.location.pathname.split('/')[1]
   const [perPage, setPerPage] = useState(10);
   const [pageNo, setPageNo] = useState(1);
-  const [jobs, setJobs] = useState([])
-  const [jobsInPage, setJobsInPage] = useState([])
-  useEffect(() => {
-    let data = jobsList.filter(job => job.applications.length > 0)
-    setJobs(data)
-    getPageData(data, pageNo, perPage)
-  }, [])
+  const [jobs, setJobs] = useState(jobsList.filter(job => job.applications.length > 0))
+  const [filteredData, setFilteredData] = useState(jobsList.filter(job => job.applications.length > 0))
+  const [filters, setFilters] = useState({
+    department: '',
+    category: '',
+    type: '',
+    search: ''
+  })
   const handlePageChange = (pageNumber) => {
     setPageNo(pageNumber);
-    getPageData(jobs, pageNumber, perPage)
   };
-  const getPageData = (data, pageNumber, pPage) => {
-    setJobsInPage(data.slice((pageNumber - 1) * pPage, ((pageNumber - 1) * pPage) + pPage <= data.length ? ((pageNumber - 1) * pPage) + pPage : data.length))
-  }
+
   const handlePerPageChange = (newPerPage) => {
     setPerPage(newPerPage);
-    getPageData(jobs, pageNo, newPerPage)
   };
+  const handleChangeFilters = (name, value) => {
+    setFilters({...filters, [name]: value})
+  }
+  useEffect(() => {
+    setFilteredData(jobs.filter(job =>
+      filters.department !== ''
+        ? job.department === filters.department && job.category.includes(filters.category) && job.type.includes(filters.type) && job.title.toLowerCase().includes(filters.search.toLowerCase())
+        : job.department.includes(filters.department) && job.category.includes(filters.category) && job.type.includes(filters.type) && job.title.toLowerCase().includes(filters.search.toLowerCase())
+    ))
+  }, [filters])
   return (
     <div>
       <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
@@ -39,7 +47,8 @@ const Applications = ({jobsList}) => {
           title='Job Applications'
         />
         <PortletBody>
-          <Table responsive>
+          <Filters filters={filters} handleChangeFilters={handleChangeFilters}/>
+          <Table responsive className='mt-3'>
             <thead>
             <tr>
               <th>#</th>
@@ -62,11 +71,13 @@ const Applications = ({jobsList}) => {
             </thead>
             <tbody>
             {
-              jobsInPage.length === 0
+              filteredData.length === 0
                 ? <tr >
                   <td colSpan={path === 'tests' ? 9 : path === 'interviews' ? 10 : 8} style={{textAlign: 'center'}}>No Jobs Found</td>
                 </tr>
-                : jobsInPage.map((job, i) => (
+                : filteredData
+                  .slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= filteredData.length ? ((pageNo - 1) * perPage) + perPage : filteredData.length)
+                  .map((job, i) => (
                   <Tooltip title='Click to view Applications' placement='top' key={i}>
                     <tr key={i} onClick={() => history.push(`/${path}/${job._id}`)} className='application-table__row'>
                       <td>{i+1}</td>
@@ -96,7 +107,7 @@ const Applications = ({jobsList}) => {
             perPage={perPage}
             handlePageChange={handlePageChange}
             handlePerPageChange={handlePerPageChange}
-            total={jobs.length}
+            total={filteredData.length}
           />
         </PortletBody>
       </Portlet>

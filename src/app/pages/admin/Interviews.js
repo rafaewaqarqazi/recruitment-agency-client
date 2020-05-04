@@ -9,6 +9,7 @@ import {getTestInterviewStatus} from "../../../utils";
 import {Tooltip} from "@material-ui/core";
 import moment from "moment";
 import PaginationComponent from "../../Components/PaginationComponent";
+import FiltersTestInterviews from "../../Components/FiltersTestInterviews";
 
 const Interviews = ({jobsList, jobEdit, isAdmin}) => {
   const history = useHistory()
@@ -24,16 +25,17 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
   const [perPage, setPerPage] = useState(10);
   const [pageNo, setPageNo] = useState(1);
   const [applicationsInPage, setApplicationsInPage] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [filters, setFilters] = useState({
+    status: '',
+    search: ''
+  })
   const handlePageChange = (pageNumber) => {
     setPageNo(pageNumber);
-    getPageData(applications, pageNumber, perPage)
   };
-  const getPageData = (data, pageNumber, perPageN) => {
-    setApplicationsInPage(data.slice((pageNumber - 1) * perPageN, ((pageNumber - 1) * perPageN) + perPageN <= data.length ? ((pageNumber - 1) * perPageN) + perPageN : data.length))
-  }
+
   const handlePerPageChange = (newPerPage) => {
     setPerPage(newPerPage);
-    getPageData(applications, pageNo, newPerPage)
   };
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -45,16 +47,18 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
   useEffect(() => {
     const data = jobsList.filter(job => job._id === params.jobId)
     if (data.length === 0) {
-      history.push('/applications')
+      history.push('/interviews')
     } else {
       setJob(data[0])
       const dataN = data[0].applications.filter(app => app.interview).map(app => ({...app, checked: false}))
       setApplications(dataN)
-      getPageData(dataN, pageNo, perPage)
+      setFilteredData(dataN.filter(job =>
+        job.interview.status.includes(filters.status) && `${job.user.firstName.toLowerCase()} ${job.user.lastName.toLowerCase()}`.includes(filters.search.toLowerCase())
+      ))
     }
-  }, [jobsList])
+  }, [jobsList, filters])
   const onCheckAll = () => {
-    setApplicationsInPage(applicationsInPage.map(application => {
+    setFilteredData(filteredData.map(application => {
       return {...application, checked: application.status === '3' && application.interview.status === '2' ? !selectAll : false}
     }))
     setSelectAll(!selectAll)
@@ -66,7 +70,7 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
     }, 3000)
   }
   const onCheckSingle = id => {
-    setApplicationsInPage(applicationsInPage.map(application => {
+    setFilteredData(filteredData.map(application => {
       if (application._id === id) {
         return {...application, checked: !application.checked}
       } else {
@@ -75,9 +79,9 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
     }))
   }
   const handleSelectCandidate = () => {
-    const applicationsIds = applicationsInPage.filter(application => application.checked)
+    const applicationsIds = filteredData.filter(application => application.checked)
       .map(app => app._id)
-    const selectedLength = applicationsInPage.filter(app => app.status === '4').length
+    const selectedLength = filteredData.filter(app => app.status === '4').length
     if (applicationsIds.length + selectedLength <= parseInt(job.positions)) {
       selectRejectCandidate({applicationsIds, jobId: job._id, status: '4'})
         .then(res => {
@@ -133,6 +137,9 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
     } else return false
 
   }
+  const handleChangeFilters = (name, value) => {
+    setFilters({...filters, [name]: value})
+  }
   return (
     <div>
       <Alert show={success.show} variant="success">{success.message}</Alert>
@@ -152,7 +159,8 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
           }
         />
         <PortletBody>
-          <Table responsive>
+          <FiltersTestInterviews filters={filters} handleChangeFilters={handleChangeFilters}/>
+          <Table responsive className='mt-3'>
             <thead>
             <tr>
               {
@@ -161,7 +169,7 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
                   <input
                     type="checkbox"
                     className='form-check'
-                    disabled={applicationsInPage.filter(app => app.interview.status === '2').length === 0}
+                    disabled={filteredData.filter(app => app.interview.status === '2').length === 0}
                     checked={selectAll}
                     onChange={onCheckAll}
                   />
@@ -182,11 +190,13 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
             </thead>
             <tbody>
             {
-              applicationsInPage.length === 0
+              filteredData.length === 0
                 ? <tr >
                   <td colSpan={isAdmin ? 8 : 6} style={{textAlign: 'center'}}>No Interviews Found</td>
                 </tr>
-                : applicationsInPage.map((application, i) => (
+                : filteredData
+                  .slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= filteredData.length ? ((pageNo - 1) * perPage) + perPage : filteredData.length)
+                  .map((application, i) => (
                   <tr key={i}>
                     {
                       isAdmin &&
@@ -235,7 +245,7 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
             perPage={perPage}
             handlePageChange={handlePageChange}
             handlePerPageChange={handlePerPageChange}
-            total={applications.length}
+            total={filteredData.length}
           />
         </PortletBody>
       </Portlet>

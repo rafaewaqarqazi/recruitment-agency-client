@@ -1,6 +1,5 @@
 import React from 'react';
 import ChangePassword from "./changePassword/ChangePassword";
-import AccountClose from "./AccountClose";
 import AccountPersonalInfo from "./personalInfo/AccountPersonalInfo";
 
 const AccountContent = ({selected}) => {
@@ -10,7 +9,6 @@ const AccountContent = ({selected}) => {
         <div className="col-xl-12">
           {selected === 0 && <AccountPersonalInfo/>}
           {selected === 1 && <ChangePassword/>}
-          {selected === 4 && <AccountClose/>}
         </div>
       </div>
     </div>

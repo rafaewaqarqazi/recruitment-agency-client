@@ -9,6 +9,7 @@ import {Tooltip} from "@material-ui/core";
 import {deleteJob} from "../../../crud/job.crud";
 import * as job from "../../../store/ducks/jobs.duck";
 import PaginationComponent from "../../../Components/PaginationComponent";
+import Filters from "../../../Components/Filters";
 
 const Jobs = ({jobsList, removeJob}) => {
   const [show, setShow] = useState(false);
@@ -17,20 +18,20 @@ const Jobs = ({jobsList, removeJob}) => {
   const [success, setSuccess] = useState({show: false, message: ''});
   const [perPage, setPerPage] = useState(10);
   const [pageNo, setPageNo] = useState(1);
-  const [jobsInPage, setJobsInPage] = useState([])
-  useEffect(() => {
-    getPageData(pageNo, perPage)
-  }, [])
+  const [filteredData, setFilteredData] = useState(jobsList)
+  const [filters, setFilters] = useState({
+    department: '',
+    category: '',
+    type: '',
+    search: ''
+  })
+
   const handlePageChange = (pageNumber) => {
     setPageNo(pageNumber);
-    getPageData(pageNumber, perPage)
   };
-  const getPageData = (pageNumber, pPage) => {
-   setJobsInPage(jobsList.slice((pageNumber - 1) * pPage, ((pageNumber - 1) * pPage) + pPage <= jobsList.length ? ((pageNumber - 1) * pPage) + pPage : jobsList.length))
-  }
+
   const handlePerPageChange = (newPerPage) => {
     setPerPage(newPerPage);
-    getPageData(pageNo, newPerPage)
   };
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -63,6 +64,17 @@ const Jobs = ({jobsList, removeJob}) => {
       setSuccess({show: false, message: ''})
     }, 3000)
   }
+
+  const handleChangeFilters = (name, value) => {
+    setFilters({...filters, [name]: value})
+  }
+  useEffect(() => {
+    setFilteredData(jobsList.filter(job =>
+      filters.department !== ''
+        ? job.department === filters.department && job.category.includes(filters.category) && job.type.includes(filters.type) && job.title.toLowerCase().includes(filters.search.toLowerCase())
+        : job.department.includes(filters.department) && job.category.includes(filters.category) && job.type.includes(filters.type) && job.title.toLowerCase().includes(filters.search.toLowerCase())
+    ))
+  }, [filters])
   return (
     <div>
       <Alert show={success.show} variant="success">{success.message}</Alert>
@@ -81,7 +93,8 @@ const Jobs = ({jobsList, removeJob}) => {
           }
         />
         <PortletBody>
-          <Table responsive>
+          <Filters filters={filters} handleChangeFilters={handleChangeFilters}/>
+          <Table responsive className='mt-2'>
             <thead>
             <tr>
               <th>#</th>
@@ -96,11 +109,13 @@ const Jobs = ({jobsList, removeJob}) => {
             </thead>
             <tbody>
             {
-              jobsList.length === 0
+              filteredData.length === 0
                 ? <tr >
                   <td colSpan={8} style={{textAlign: 'center'}}>No Jobs Found</td>
                 </tr>
-                : jobsInPage.map((job, i) => (
+                : filteredData
+                  .slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= jobsList.length ? ((pageNo - 1) * perPage) + perPage : jobsList.length)
+                  .map((job, i) => (
                 <tr key={i}>
                   <td>{i+1}</td>
                   <td>{job.title}</td>
@@ -129,7 +144,7 @@ const Jobs = ({jobsList, removeJob}) => {
             perPage={perPage}
             handlePageChange={handlePageChange}
             handlePerPageChange={handlePerPageChange}
-            total={jobsList.length}
+            total={filteredData.length}
           />
         </PortletBody>
       </Portlet>

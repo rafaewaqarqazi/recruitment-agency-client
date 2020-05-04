@@ -9,6 +9,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import {DateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import {getStatus} from "../../../../utils";
 import PaginationComponent from "../../../Components/PaginationComponent";
+import FiltersApplication from "../../../Components/FiltersApplication";
 
 const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const history = useHistory()
@@ -20,6 +21,11 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const [error, setError] = useState({show: false, message: ''});
   const [success, setSuccess] = useState({show: false, message: ''});
   const [selectAll, setSelectAll] = useState(false);
+  const [filteredData, setFilteredData] = useState([])
+  const [filters, setFilters] = useState({
+    status: '',
+    search: ''
+  })
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
@@ -29,14 +35,10 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
   const [applicationsInPage, setApplicationsInPage] = useState([])
   const handlePageChange = (pageNumber) => {
     setPageNo(pageNumber);
-    getPageData(applications, pageNumber, perPage)
   };
-  const getPageData = (data, pageNumber, perPageN) => {
-    setApplicationsInPage(data.slice((pageNumber - 1) * perPageN, ((pageNumber - 1) * perPageN) + perPageN <= data.length ? ((pageNumber - 1) * perPageN) + perPageN : data.length))
-  }
+
   const handlePerPageChange = (newPerPage) => {
     setPerPage(newPerPage);
-    getPageData(applications, pageNo, newPerPage)
   };
   useEffect(() => {
     const data = jobsList.filter(job => job._id === params.jobId)
@@ -46,11 +48,13 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
       setJob(data[0])
       const dataN = data[0].applications.map(app => ({...app, checked: false}))
       setApplications(dataN)
-      getPageData(dataN, pageNo, perPage)
+      setFilteredData(dataN.filter(job =>
+        job.status.includes(filters.status) && `${job.user.firstName.toLowerCase()} ${job.user.lastName.toLowerCase()}`.includes(filters.search.toLowerCase())
+      ))
     }
-  }, [jobsList])
+  }, [jobsList, filters])
   const onCheckAll = () => {
-    setApplicationsInPage(applicationsInPage.map(application => {
+    setFilteredData(filteredData.map(application => {
       return {...application, checked: application.status === '1' ? !selectAll : false}
     }))
     setSelectAll(!selectAll)
@@ -62,7 +66,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
     }, 3000)
   }
   const onCheckSingle = id => {
-    setApplicationsInPage(applicationsInPage.map(application => {
+    setFilteredData(filteredData.map(application => {
       if (application._id === id) {
         return {...application, checked: !application.checked}
       } else {
@@ -71,7 +75,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
     }))
   }
   const handleScheduleTest = () => {
-    const applicationsIds = applicationsInPage.filter(application => application.checked)
+    const applicationsIds = filteredData.filter(application => application.checked)
       .map(app => app._id)
     scheduleTestInterview({applicationsIds, jobId: job._id, date, type: 'test', status: '2'})
       .then(res => {
@@ -92,6 +96,10 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
         closeAlert()
       })
   }
+  const handleChangeFilters = (name, value) => {
+    setFilters({...filters, [name]: value})
+  }
+
   return (
     <div>
       <Alert show={success.show} variant="success">{success.message}</Alert>
@@ -101,14 +109,15 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
           title={`${job.title} Applications`}
           toolbar={
             <PortletHeaderToolbar>
-              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={applicationsInPage.filter(app => app.checked).length === 0}>
+              <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={filteredData.filter(app => app.checked).length === 0}>
                 <i className='fa fa-clock'/> Schedule Test
               </button>
             </PortletHeaderToolbar>
           }
         />
         <PortletBody>
-          <Table responsive>
+          <FiltersApplication filters={filters} handleChangeFilters={handleChangeFilters}/>
+          <Table responsive className='mt-3'>
             <thead>
             <tr>
               <th><input type="checkbox" className='form-check' checked={selectAll} onChange={onCheckAll}/></th>
@@ -121,11 +130,13 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
             </thead>
             <tbody>
             {
-              applicationsInPage.length === 0
+              filteredData.length === 0
                 ? <tr >
                   <td colSpan={5} style={{textAlign: 'center'}}>No Applications Found</td>
                 </tr>
-                : applicationsInPage.map((application, i) => (
+                : filteredData
+                  .slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= filteredData.length ? ((pageNo - 1) * perPage) + perPage : filteredData.length)
+                  .map((application, i) => (
                   <tr key={i}>
                     <td><input type="checkbox" className='form-check' disabled={application.status !== '1'} checked={application.checked} onChange={() => onCheckSingle(application._id)}/></td>
                     <td>{application.user.firstName}</td>
@@ -143,7 +154,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
             perPage={perPage}
             handlePageChange={handlePageChange}
             handlePerPageChange={handlePerPageChange}
-            total={applications.length}
+            total={filteredData.length}
           />
         </PortletBody>
       </Portlet>
