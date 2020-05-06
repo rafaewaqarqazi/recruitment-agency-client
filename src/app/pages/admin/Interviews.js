@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {Alert, Modal, Table} from "react-bootstrap";
 import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../partials/content/Portlet";
 import {useHistory, useParams} from "react-router-dom";
@@ -21,11 +21,12 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
   const [error, setError] = useState({show: false, message: ''});
   const [success, setSuccess] = useState({show: false, message: ''});
   const [selectAll, setSelectAll] = useState(false);
-  const [statusData, setStatusData] = useState({applicationId: '', status: ''})
+  const [statusData, setStatusData] = useState({applicationId: '', status: '', email: ''})
   const [perPage, setPerPage] = useState(10);
   const [pageNo, setPageNo] = useState(1);
   const [applicationsInPage, setApplicationsInPage] = useState([])
   const [filteredData, setFilteredData] = useState([])
+  const [selectionStatus, setSelectionStatus] = useState('')
   const [filters, setFilters] = useState({
     status: '',
     search: ''
@@ -38,10 +39,13 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
     setPerPage(newPerPage);
   };
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = (s) => {
+    setSelectionStatus(s)
+    setShow(true);
+  }
   const handleCloseStatus = () => setShowStatus(false);
-  const handleShowStatus = (applicationId, status) => {
-    setStatusData({applicationId, status})
+  const handleShowStatus = (applicationId, status, email) => {
+    setStatusData({applicationId, status, email})
     setShowStatus(true);
   }
   useEffect(() => {
@@ -81,31 +85,37 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
   const handleSelectCandidate = () => {
     const applicationsIds = filteredData.filter(application => application.checked)
       .map(app => app._id)
+    const emails = filteredData.filter(application => application.checked).map(app => app.user.email)
     const selectedLength = filteredData.filter(app => app.status === '4').length
-    if (applicationsIds.length + selectedLength <= parseInt(job.positions)) {
-      selectRejectCandidate({applicationsIds, jobId: job._id, status: '4'})
-        .then(res => {
-          if (!res.data.success) {
-            setError({show: true, message: res.data.message})
-            handleClose()
-            closeAlert()
-          } else {
-            setSuccess({show: true, message: res.data.message})
-            handleClose()
-            jobEdit(res.data.job)
-            closeAlert()
-          }
-        })
-        .catch(error => {
-          setError({show: true, message: 'Could not perform this action'})
-          handleClose()
-          closeAlert()
-        })
+    if (((applicationsIds.length + selectedLength) <= parseInt(job.positions)) && selectionStatus === '4') {
+      selectReject(applicationsIds, emails)
+    } else if (selectionStatus === '6') {
+      selectReject(applicationsIds, emails)
     } else {
       setError({show: true, message: 'Number of positions exceeds!'})
       handleClose()
       closeAlert()
     }
+  }
+  const selectReject = (applicationsIds, emails) => {
+    selectRejectCandidate({applicationsIds, jobId: job._id, status: selectionStatus, emails})
+      .then(res => {
+        if (!res.data.success) {
+          setError({show: true, message: res.data.message})
+          handleClose()
+          closeAlert()
+        } else {
+          setSuccess({show: true, message: res.data.message})
+          handleClose()
+          jobEdit(res.data.job)
+          closeAlert()
+        }
+      })
+      .catch(error => {
+        setError({show: true, message: 'Could not perform this action'})
+        handleClose()
+        closeAlert()
+      })
   }
   const handleChangeStatus = () => {
     changeTestInterviewStatus({jobId: job._id, type: 'interview', ...statusData})
@@ -151,9 +161,14 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
             <PortletHeaderToolbar>
               {
                 isAdmin &&
-                  <button className='btn btn-label btn-bold btn-sm' onClick={handleShow} disabled={isDisabled()}>
-                    <i className='fa fa-clock'/> Select Candidates
-                  </button>
+                  <Fragment>
+                    <button className='btn btn-label btn-bold btn-sm' onClick={() => handleShow('4')} disabled={isDisabled()}>
+                      <i className='fa fa-check-double'/> Select Candidates
+                    </button>
+                    <button className='btn btn-label-danger btn-bold btn-sm ml-2' onClick={() => handleShow('6')} disabled={isDisabled()}>
+                      <i className='fa fa-times-circle'/> Reject Candidates
+                    </button>
+                  </Fragment>
               }
             </PortletHeaderToolbar>
           }
@@ -221,14 +236,14 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
                         <td>
                           <Tooltip title='Mark as Passed!' placement='top'>
                           <span>
-                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 3} onClick={() => handleShowStatus(application._id, '2')}>
-                              <i className='fa fa-check-double text-success mr-4' onClick={() => handleShowStatus(application._id, '2')}/>
+                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 3} onClick={() => handleShowStatus(application._id, '2', application.user.email)}>
+                              <i className='fa fa-check-double text-success mr-4' />
                             </button>
                           </span>
                           </Tooltip>
                           <Tooltip title='Mark as failed' placement='top' >
                           <span>
-                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 3} onClick={() => handleShowStatus(application._id, '3')}>
+                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 3} onClick={() => handleShowStatus(application._id, '3', application.user.email)}>
                               <i className='fa fa-times-circle text-danger' />
                             </button>
                           </span>

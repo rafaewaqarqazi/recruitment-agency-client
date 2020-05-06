@@ -24,7 +24,7 @@ const Tests = ({jobsList, jobEdit, isAdmin}) => {
   const [error, setError] = useState({show: false, message: ''});
   const [success, setSuccess] = useState({show: false, message: ''});
   const [selectAll, setSelectAll] = useState(false);
-  const [statusData, setStatusData] = useState({applicationId: '', status: ''})
+  const [statusData, setStatusData] = useState({applicationId: '', status: '', email: ''})
   const [perPage, setPerPage] = useState(10);
   const [pageNo, setPageNo] = useState(1);
   const [applicationsInPage, setApplicationsInPage] = useState([])
@@ -43,8 +43,8 @@ const Tests = ({jobsList, jobEdit, isAdmin}) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleCloseStatus = () => setShowStatus(false);
-  const handleShowStatus = (applicationId, status) => {
-    setStatusData({applicationId, status})
+  const handleShowStatus = (applicationId, status, email) => {
+    setStatusData({applicationId, status, email})
     setShowStatus(true);
   }
   useEffect(() => {
@@ -84,7 +84,8 @@ const Tests = ({jobsList, jobEdit, isAdmin}) => {
   const handleScheduleInterview = () => {
     const applicationsIds = filteredData.filter(application => application.checked)
       .map(app => app._id)
-    scheduleTestInterview({applicationsIds, jobId: job._id, date, status: '3', type: 'interview'})
+    const emails = filteredData.filter(application => application.checked).map(app => app.user.email)
+    scheduleTestInterview({applicationsIds, jobId: job._id, date, status: '3', type: 'interview', emails})
       .then(res => {
         if (!res.data.success) {
           setError({show: true, message: res.data.message})
@@ -206,14 +207,14 @@ const Tests = ({jobsList, jobEdit, isAdmin}) => {
                         <td>
                           <Tooltip title='Mark as Passed!' placement='top'>
                           <span>
-                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 2} onClick={() => handleShowStatus(application._id, '2')}>
-                              <i className='fa fa-check-double text-success mr-4' onClick={() => handleShowStatus(application._id, '2')}/>
+                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 2} onClick={() => handleShowStatus(application._id, '2', application.user.email)}>
+                              <i className='fa fa-check-double text-success mr-4' />
                             </button>
                           </span>
                           </Tooltip>
                           <Tooltip title='Mark as failed' placement='top' >
                           <span>
-                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 2} onClick={() => handleShowStatus(application._id, '3')}>
+                            <button className='btn btn-icon h-auto w-auto' disabled={parseInt(application.status) > 2} onClick={() => handleShowStatus(application._id, '3', application.user.email)}>
                               <i className='fa fa-times-circle text-danger' />
                             </button>
                           </span>

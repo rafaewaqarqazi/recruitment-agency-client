@@ -75,9 +75,9 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
     }))
   }
   const handleScheduleTest = () => {
-    const applicationsIds = filteredData.filter(application => application.checked)
-      .map(app => app._id)
-    scheduleTestInterview({applicationsIds, jobId: job._id, date, type: 'test', status: '2'})
+    const applicationsIds = filteredData.filter(application => application.checked).map(app => app._id)
+    const emails = filteredData.filter(application => application.checked).map(app => app.user.email)
+    scheduleTestInterview({applicationsIds, jobId: job._id, date, type: 'test', status: '2', emails})
       .then(res => {
         if (!res.data.success) {
           setError({show: true, message: res.data.message})
