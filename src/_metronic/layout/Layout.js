@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import { connect } from "react-redux";
 import objectPath from "object-path";
 import Header from "./header/Header";
-import SubHeader from "./sub-header/SubHeader";
 import { withRouter } from "react-router-dom";
 import HeaderMobile from "./header/HeaderMobile";
 import AsideLeft from "./aside/AsideLeftAdmin";
@@ -41,8 +40,8 @@ function Layout({children, layoutConfig}) {
       {/* <!-- end:: Header Mobile --> */}
 
       <div
-        className="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled"
-        style={{background: '#f2f3f8'}}
+        className="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed "
+        style={{background: '#f2f3f8', backgroundImage: 'url(/media/bg/bg-9.jpg)', backgroundSize: '100% 430px', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed'}}
       >
         {/* <!-- begin::Body --> */}
         <HeaderMobile />
@@ -60,7 +59,6 @@ function Layout({children, layoutConfig}) {
 
 
           <main className={clsx(classes.content, classes.contentShift)}>
-            <SubHeader/>
             <KtContent>{children}</KtContent>
           </main>
         </div>
@@ -75,8 +73,7 @@ function Layout({children, layoutConfig}) {
 const mapStateToProps = ({ builder: { layoutConfig } }) => ({
   layoutConfig,
   selfLayout: objectPath.get(layoutConfig, "self.layout"),
-  asideDisplay: objectPath.get(layoutConfig, "aside.self.display"),
-  subheaderDisplay: objectPath.get(layoutConfig, "subheader.display")
+  asideDisplay: objectPath.get(layoutConfig, "aside.self.display")
 });
 
 export default withRouter(connect(mapStateToProps)(Layout));

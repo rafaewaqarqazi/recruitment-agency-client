@@ -15,11 +15,6 @@ const MainFooter = () => {
                   <Link to="/">Recruitment Agency</Link>
                 </div>
               </div>
-              <div className="kt-footer__menu">
-                <Link to="/" >Home</Link>
-                <Link to="/faqs">FAQs</Link>
-                <Link to="/" >Contact</Link>
-              </div>
             </div>
           </div>
         </div>

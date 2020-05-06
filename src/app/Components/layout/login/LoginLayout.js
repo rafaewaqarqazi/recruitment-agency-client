@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 const LoginLayout = ({children, heading}) => {
   return (
@@ -15,6 +16,7 @@ const LoginLayout = ({children, heading}) => {
             <div className="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
               <div className="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
                 <div className="kt-login__container">
+                  <Link to='/' className="btn btn-label"> <i className='fa fa-arrow-left'/> Back</Link>
                   <div className="kt-login__logo m-0">
                     <img src="/media/logos/recruitment-agency-logo.png" alt='Logo' width="150"/>
                   </div>

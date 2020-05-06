@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/styles";
-const drawerWidth = 265;
+const drawerWidth = 250;
 export const useLayoutStyles = makeStyles(theme => ({
   content: {
     flexGrow: 1,

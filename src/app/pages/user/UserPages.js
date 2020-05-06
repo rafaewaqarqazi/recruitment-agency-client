@@ -14,6 +14,7 @@ import Login from "../auth/Login";
 import Registration from "../auth/Registration";
 import UserLayout from "../../Components/layout/user/UserLayout";
 import {shallowEqual, useSelector} from "react-redux";
+import KtContent from "../../../_metronic/layout/KtContent";
 
 const UserPages = () => {
   const { isAuthorized } = useSelector(
@@ -31,43 +32,43 @@ const UserPages = () => {
         { !isAuthorized && <Route path="/auth/registration" component={Registration} exact/>}
         <Route path="/jobs/list" component={() => (
           <UserLayout>
-            <Dashboard/>
+            <KtContent><Dashboard/></KtContent>
           </UserLayout>
         )} exact/>
 
         <UserRoute path="/jobs/applied" component={() => (
           <UserLayout>
-            <JobsApplied/>
+            <KtContent><JobsApplied/></KtContent>
           </UserLayout>
         )} exact/>
         <Route path="/jobs/details/:jobId" component={() => (
           <UserLayout>
-            <JobDetails/>
+            <KtContent><JobDetails/></KtContent>
           </UserLayout>
         )} exact/>
         <Route path="/interviews" component={() => (
           <UserLayout>
-            <Applications/>
+            <KtContent><Applications/></KtContent>
           </UserLayout>
         )} exact/>
         <Route path="/interviews/:jobId" component={() => (
           <UserLayout>
-            <Interviews/>
+            <KtContent><Interviews/></KtContent>
           </UserLayout>
         )} exact/>
         <Route path="/tests" component={() => (
           <UserLayout>
-            <Applications/>
+            <KtContent><Applications/></KtContent>
           </UserLayout>
         )} exact/>
         <Route path="/tests/:jobId" component={() => (
           <UserLayout>
-            <Tests/>
+            <KtContent><Tests/></KtContent>
           </UserLayout>
         )} exact/>
         <UserRoute path="/account" component={() => (
           <UserLayout>
-            <Account/>
+            <KtContent><Account/></KtContent>
           </UserLayout>
         )} exact/>
         <Redirect to="/" />

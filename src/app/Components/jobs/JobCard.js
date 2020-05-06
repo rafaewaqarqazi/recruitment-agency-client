@@ -55,7 +55,9 @@ const JobCard = ({job, setSuccess, setError, jobEdit}) => {
           title={job.title}
         />
         <PortletBody>
-          <h5>{getDepartment(job.department)}</h5>
+          <Tooltip title={getDepartment(job.department)} placement='top'>
+            <h5 style={{textOverflow: 'ellipsis'}} className='text-nowrap overflow-hidden'>{getDepartment(job.department)}</h5>
+          </Tooltip>
           <div className='pt-2 pb-2'>
             <div className='d-flex justify-content-between'>
               <span className='font-weight-bold'>No of Positions:</span>

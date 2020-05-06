@@ -54,7 +54,7 @@ export default function Dashboard() {
           : filteredData
             .slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= filteredData.length ? ((pageNo - 1) * perPage) + perPage : filteredData.length)
             .map(job => (
-            <div className="col-12 col-sm-4" key={job._id}>
+            <div className="col-12 col-sm-4 col-md-3" key={job._id}>
               <JobCard job={job} setError={setError} setSuccess={setSuccess}/>
             </div>
           ))
