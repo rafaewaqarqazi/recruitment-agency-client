@@ -12,7 +12,7 @@ class Logout extends Component {
   render() {
     const { hasAuthToken } = this.props;
 
-    return hasAuthToken ? <LayoutSplashScreen /> : <Redirect to="/auth" />;
+    return hasAuthToken ? <LayoutSplashScreen /> : <Redirect to="/" />;
   }
 }
 

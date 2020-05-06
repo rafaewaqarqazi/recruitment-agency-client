@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import UserProfile from "../../../app/partials/layout/UserProfile";
+import {connect} from "react-redux";
 
 class HeaderMobile extends React.Component {
   render() {
+    const {isAuthorized} = this.props
     return (
       <div id="kt_header_mobile" className="kt-header-mobile  kt-header-mobile--fixed ">
         <div className="kt-header-mobile__logo">
@@ -15,13 +17,16 @@ class HeaderMobile extends React.Component {
           <button className="kt-header-mobile__toggler kt-header-mobile__toggler--left mr-2" >
             <span/>
           </button>
-          <UserProfile/>
+          {
+            isAuthorized && <UserProfile/>
+          }
         </div>
       </div>
     );
   }
 }
+const mapStateToProps = ({ auth}) => ({
+  isAuthorized: auth.user != null
+});
 
-
-
-export default HeaderMobile;
+export default connect(mapStateToProps)(HeaderMobile);

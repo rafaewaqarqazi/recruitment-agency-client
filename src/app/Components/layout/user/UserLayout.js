@@ -14,6 +14,7 @@ import Hidden from "@material-ui/core/Hidden";
 import AsideLeftUser from "../../../../_metronic/layout/aside/AsideLeftUser";
 import clsx from "clsx";
 import {useLayoutStyles} from "../../../../utils/material-styles/layoutStyles";
+import HeaderUser from "../../../../_metronic/layout/header/HeaderUser";
 const htmlClassService = new HTMLClassService();
 const UserLayout = ({children, layoutConfig}) => {
   const classes = useLayoutStyles();
@@ -32,7 +33,7 @@ const UserLayout = ({children, layoutConfig}) => {
       {/* <!-- begin:: Header Mobile --> */}
       <HeaderMobile />
       {/* <!-- end:: Header Mobile --> */}
-
+      <HeaderUser/>
       <div
         className="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--enabled kt-subheader--fixed kt-subheader--solid kt-aside--enabled"
         style={{background: '#f2f3f8'}}
@@ -40,16 +41,16 @@ const UserLayout = ({children, layoutConfig}) => {
         {/* <!-- begin::Body --> */}
         <HeaderMobile />
         <div className="d-flex kt-wrapper">
-          <Hidden xsDown>
-            <AsideLeftUser open={open} setOpen={setOpen}/>
-          </Hidden>
-          <div className={clsx(classes.appBar, {
-            [classes.appBarShift]: open,
-            [classes.appBarShiftLeft]: !open
-          })}>
-            <Header />
+          {/*<Hidden xsDown>*/}
+          {/*  <AsideLeftUser open={open} setOpen={setOpen}/>*/}
+          {/*</Hidden>*/}
+          {/*<div className={clsx(classes.appBar, {*/}
+          {/*  [classes.appBarShift]: open,*/}
+          {/*  [classes.appBarShiftLeft]: !open*/}
+          {/*})}>*/}
 
-          </div>
+
+          {/*</div>*/}
 
 
           <main className={clsx(classes.content, classes.contentShift)}>

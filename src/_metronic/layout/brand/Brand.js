@@ -16,16 +16,12 @@ class Brand extends React.Component {
         className={`kt-header__brand ${this.props.brandClasses} kt-grid__item`}
         id="kt_header_brand"
       >
-        <Link to="" className="kt-header__brand-logo">
+        <Link to="/" className="kt-header__brand-logo">
           <img
             alt="logo"
-            src={toAbsoluteUrl("/media/logos/logo-4.png")}
+            src={toAbsoluteUrl("/media/logos/recruitment-agency-Logo.png")}
             className="kt-header__brand-logo-default"
-          />
-          <img
-            alt="logo"
-            src={toAbsoluteUrl("/media/logos/logo-4-sm.png")}
-            className="kt-header__brand-logo-sticky"
+            width={50}
           />
         </Link>
       </div>
