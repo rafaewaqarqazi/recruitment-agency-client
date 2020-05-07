@@ -142,7 +142,7 @@ const ApplicationsSingle = ({jobsList, jobEdit}) => {
                     <td>{application.user.firstName}</td>
                     <td>{application.user.lastName}</td>
                     <td>{application.user.email}</td>
-                    <td>{application.user.user_details ? <a href={`/pdf/${application.user.user_details.cv.filename}`} target='_blank' className='text-decoration-none'><i className='fa fa-file-pdf'/></a> : 'Not Provided'}</td>
+                    <td>{application.user.user_details ? <a href={`/pdf/${application.user.user_details.cv.filename}`} target='_blank' className='text-decoration-none text-danger' style={{fontSize: 16}}><i className='fa fa-file-pdf'/></a> : 'Not Provided'}</td>
                     <td>{getStatus(application.status)}</td>
                   </tr>
                 ))

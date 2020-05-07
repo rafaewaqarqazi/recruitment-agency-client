@@ -234,7 +234,7 @@ const Interviews = ({jobsList, jobEdit, isAdmin}) => {
                     <td>{application.user.email}</td>
                     {
                       isAdmin &&
-                      <td>{application.user.user_details ? <a href={`/pdf/${application.user.user_details.cv.filename}`} target='_blank' className='text-decoration-none'><i className='fa fa-file-pdf'/></a> : 'Not Provided'}</td>
+                      <td>{application.user.user_details ? <a href={`/pdf/${application.user.user_details.cv.filename}`} target='_blank' className='text-decoration-none text-danger' style={{fontSize: 16}}><i className='fa fa-file-pdf'/></a> : 'Not Provided'}</td>
                     }
                     <td>{getTestInterviewStatus(application.interview.status)}</td>
                     <td>{moment(application.interview.date).format('DD/MM/YYYY')}</td>
