@@ -11,6 +11,7 @@ import AdminRoute from "../../router/AdminRoute";
 import JobDetails from "../../Components/jobs/JobDetails";
 import Applications from "./Jobs/Applications";
 import ApplicationsSingle from "./Jobs/ApplicationsSingle";
+import Admins from "./Admins";
 
 export default function AdminPages() {
   return (
@@ -32,6 +33,7 @@ export default function AdminPages() {
         <AdminRoute path="/tests" component={Applications} exact/>
         <AdminRoute path="/tests/:jobId" component={Tests} exact/>
         <AdminRoute path="/account" component={Account} exact/>
+        <AdminRoute path="/admins" component={Admins} exact/>
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>
