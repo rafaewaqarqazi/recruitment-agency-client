@@ -82,7 +82,7 @@ const AccountPersonalInfoDetails = ({user, fulfillUser}) => {
               </label>
               <div className="col-lg-9 col-xl-6">
                 <div className="kt-avatar kt-avatar--outline">
-                  <img src={user.profileImage ? `/images/${user.profileImage.filename}` : "/media/users/100_13.jpg"} alt="" className="kt-avatar__holder"/>
+                  <img src={user.profileImage && user.profileImage.filename ? `/images/${user.profileImage.filename}` : "/media/users/100_13.jpg"} alt="" className="kt-avatar__holder"/>
                   {
                     edit &&
                     <label className="kt-avatar__upload">
@@ -128,16 +128,20 @@ const AccountPersonalInfoDetails = ({user, fulfillUser}) => {
                     </div>
                     <h5>{user.country || 'Not Provided'}</h5>
                   </div>
-                  <div className="form-group col-6">
-                    <div className='form-label'>
-                      CV
+                  {
+                    user.role === '1' &&
+                    <div className="form-group col-6">
+                      <div className='form-label'>
+                        CV
+                      </div>
+                      <div className='pdf-uploaded'>
+                        <a href={`/pdf/${user.user_details.cv.filename}`} target='_blank'>
+                          <div className='fa fa-file-pdf'/>
+                        </a>
+                      </div>
                     </div>
-                    <div className='pdf-uploaded'>
-                      <a href={`/pdf/${user.user_details.cv.filename}`} target='_blank'>
-                        <div className='fa fa-file-pdf'/>
-                      </a>
-                    </div>
-                  </div>
+                  }
+
 
                 </div>
                 : <div className="row">
@@ -224,42 +228,46 @@ const AccountPersonalInfoDetails = ({user, fulfillUser}) => {
                             <ErrorMessage name='country' render={formErrorMessage}/>
                           </div>
                         </div>
-                        <div className="form-group form-group-last row pb-3">
-                          <label className="col-xl-3 col-lg-3 col-form-label">
-                            CV
-                          </label>
-                          <div className="col-lg-9 col-xl-6">
-                            <Dropzone
-                              onDrop={(acceptedFiles) => setFieldValue('cv', acceptedFiles[0])}
-                              accept="application/pdf"
-                              onDropRejected={onDropReject}
-                              multiple={false}
-                            >
-                              {({getRootProps, getInputProps, isDragActive}) => (
-                                getRootProps && getInputProps && <section>
-                                  <div {...getRootProps({
-                                    className: `base-style ${isDragActive ? 'active-style' : ''}`
-                                  })}>
-                                    <input {...getInputProps()} />
-                                    {
-                                      isDragActive
-                                        ? <span>Drop the file here ...</span>
-                                        : <span>Drag 'n' drop file in pdf here, or click to select file</span>
-                                    }
-                                  </div>
-                                </section>
-                              )}
-                            </Dropzone>
-                            <ErrorMessage name='cv' render={formErrorMessage}/>
-                            {
-                              values.cv &&
-                              <div className='pdf-uploaded'>
-                                <div className='fa fa-file-pdf'/>
-                                <div className='fa fa-minus-circle' onClick={() => setFieldValue('cv', null)}/>
-                              </div>
-                            }
+                        {
+                          user.role === '1' &&
+                          <div className="form-group form-group-last row pb-3">
+                            <label className="col-xl-3 col-lg-3 col-form-label">
+                              CV
+                            </label>
+                            <div className="col-lg-9 col-xl-6">
+                              <Dropzone
+                                onDrop={(acceptedFiles) => setFieldValue('cv', acceptedFiles[0])}
+                                accept="application/pdf"
+                                onDropRejected={onDropReject}
+                                multiple={false}
+                              >
+                                {({getRootProps, getInputProps, isDragActive}) => (
+                                  getRootProps && getInputProps && <section>
+                                    <div {...getRootProps({
+                                      className: `base-style ${isDragActive ? 'active-style' : ''}`
+                                    })}>
+                                      <input {...getInputProps()} />
+                                      {
+                                        isDragActive
+                                          ? <span>Drop the file here ...</span>
+                                          : <span>Drag 'n' drop file in pdf here, or click to select file</span>
+                                      }
+                                    </div>
+                                  </section>
+                                )}
+                              </Dropzone>
+                              <ErrorMessage name='cv' render={formErrorMessage}/>
+                              {
+                                values.cv &&
+                                <div className='pdf-uploaded'>
+                                  <div className='fa fa-file-pdf'/>
+                                  <div className='fa fa-minus-circle' onClick={() => setFieldValue('cv', null)}/>
+                                </div>
+                              }
+                            </div>
                           </div>
-                        </div>
+                        }
+
                         <div className="kt-portlet__foot">
                           <div className="kt-form__actions">
                             <div className="row">

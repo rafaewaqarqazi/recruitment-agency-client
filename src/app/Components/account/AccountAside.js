@@ -10,7 +10,7 @@ const AccountAside = ({ selected, setSelected, user }) => {
           <div className="kt-widget kt-widget--user-profile-1">
             <div className="kt-widget__head">
               <div className="kt-widget__media">
-                <img src={`${user.profileImage ? `/images/${user.profileImage.filename}` : '/media/users/100_13.jpg'}`} alt="profile" />
+                <img src={`${user.profileImage && user.profileImage.filename ? `/images/${user.profileImage.filename}` : '/media/users/100_13.jpg'}`} alt="profile" />
               </div>
               <div className="kt-widget__content">
                 <div className="kt-widget__section">
