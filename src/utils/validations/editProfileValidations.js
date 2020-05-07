@@ -8,6 +8,9 @@ export const editProfileValidations = values => {
   if (!values.lastName) {
     errors.lastName = 'Required!'
   }
+  if (!values.mobileNo) {
+    errors.mobileNo = 'Required!'
+  }
   if (!values.address) {
     errors.address = 'Required!'
   }

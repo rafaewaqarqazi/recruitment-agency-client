@@ -151,7 +151,8 @@ const AccountPersonalInfoDetails = ({user, fulfillUser}) => {
                       lastName: user.lastName,
                       address: user.address,
                       country: user.country,
-                      cv: user.user_details.cv.filename
+                      cv: user.user_details.cv.filename,
+                      mobileNo: user.mobileNo
                     }}
                     validate={editProfileValidations}
                     onSubmit={(values, { setStatus, setSubmitting, resetForm }) => {
@@ -208,6 +209,15 @@ const AccountPersonalInfoDetails = ({user, fulfillUser}) => {
                           <div className="col-lg-9 col-xl-6">
                             <Field className="form-control" name="lastName" placeholder="Last Name"/>
                             <ErrorMessage name='lastName' render={formErrorMessage}/>
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label className="col-xl-3 col-lg-3 col-form-label">
+                            Mobile No
+                          </label>
+                          <div className="col-lg-9 col-xl-6">
+                            <Field className="form-control" name="mobileNo" placeholder="03XXXXXXXXX"/>
+                            <ErrorMessage name='mobileNo' render={formErrorMessage}/>
                           </div>
                         </div>
                         <div className="form-group row">

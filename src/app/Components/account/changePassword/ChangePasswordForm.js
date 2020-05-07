@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import {changePassword} from "../../../crud/auth.crud";
 import { changePasswordValidations } from "../../../../utils/validations/changePasswordValidations";
-import {Alert} from 'reactstrap'
+import {Alert} from 'react-bootstrap'
 import {Link} from "react-router-dom";
 import clsx from "clsx";
 import {formErrorMessage} from "../../../pages/errors/FormErrorMessage";
 import {connect} from "react-redux";
 const ChangePasswordForm = ({user}) => {
   const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState({show: false, message: ''});
+  const [success, setSuccess] = useState({show: false, message: ''});
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
     paddingRight: "1rem"
   });
@@ -24,6 +24,12 @@ const ChangePasswordForm = ({user}) => {
     setLoading(false);
     setLoadingButtonStyle({ paddingRight: "1rem" });
   };
+  const closeAlert = () => {
+    setTimeout(() => {
+      setError({show: false, message: ''})
+      setSuccess({show: false, message: ''})
+    }, 3000)
+  }
   return (
     <Formik
       initialValues={{
@@ -34,35 +40,30 @@ const ChangePasswordForm = ({user}) => {
       validate={changePasswordValidations}
       onSubmit={(values, { setStatus, setSubmitting, resetForm }) => {
         enableLoading();
-        setTimeout(() => {
-          changePassword({...values, id: user.id, confirmPassword: undefined})
-            .then(res => {
-              if (res.data.error) {
-                disableLoading();
-                setSuccess(false)
-                setStatus(res.data.error);
-                setVisible(true);
-              } else {
-                disableLoading();
-                setVisible(false);
-                resetForm({
-                  oldPassword: "",
-                  newPassword: "",
-                  confirmPassword: ""
-                })
-                setStatus(res.data.success);
-                setSuccess(true);
-
-              }
-              setSubmitting(false)
-            })
-            .catch((error) => {
+        changePassword({...values, userId: user._id, confirmPassword: undefined})
+          .then(res => {
+            if (!res.data.success) {
               disableLoading();
-              setSubmitting(false);
-              setStatus("Couldn't Change Your Password");
-              setVisible(true)
-            });
-        }, 1000);
+              setError({show: true, message: res.data.message})
+              closeAlert()
+            } else {
+              disableLoading();
+              setSuccess({show: true, message: res.data.message})
+              closeAlert()
+              resetForm({
+                oldPassword: "",
+                newPassword: "",
+                confirmPassword: ""
+              })
+            }
+            setSubmitting(false)
+          })
+          .catch((error) => {
+            disableLoading();
+            setSubmitting(false);
+            setError({show: true, message: 'Could not change password'})
+            closeAlert()
+          });
       }}
     >
       {({status, handleSubmit, isSubmitting, resetForm}) =>
@@ -70,47 +71,8 @@ const ChangePasswordForm = ({user}) => {
           <div className="kt-portlet__body">
             <div className="kt-section kt-section--first">
               <div className="kt-section__body">
-                <Alert className='alert-solid-danger' isOpen={visible} >
-                  <div className="alert-icon">
-                    <i className="fa fa-exclamation-triangle" />
-                  </div>
-                  {!status ?
-                    <span>
-                      Configure user passwords to expire periodically. Users will
-                      need warning that their passwords are going to expire, <br />
-                      or they might inadvertently get locked out of the system!
-                    </span>
-                    : <div className='alert-text'>{status}</div>
-                  }
-                  <div className="alert-close">
-                    <button
-                      type="button"
-                      className="close"
-                      onClick={() => setVisible(false)}
-                    >
-                    <span aria-hidden="true">
-                      <i className="la la-close" />
-                    </span>
-                    </button>
-                  </div>
-                </Alert>
-                <Alert className='alert-solid-success' isOpen={success} >
-                  <div className="alert-icon">
-                    <i className="fa fa-check-circle" />
-                  </div>
-                  <div className='alert-text'>{status}</div>
-                  <div className="alert-close">
-                    <button
-                      type="button"
-                      className="close"
-                      onClick={() => setSuccess(false)}
-                    >
-                    <span aria-hidden="true">
-                      <i className="la la-close" />
-                    </span>
-                    </button>
-                  </div>
-                </Alert>
+                <Alert show={success.show} variant="success">{success.message}</Alert>
+                <Alert show={error.show} variant="danger">{error.message}</Alert>
                 <div className="row">
                   <label className="col-xl-3" />
                   <div className="col-lg-9 col-xl-6">
