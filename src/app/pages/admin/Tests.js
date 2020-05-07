@@ -165,7 +165,11 @@ const Tests = ({jobsList, jobEdit, isAdmin}) => {
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
-              <th>CV</th>
+              {
+                isAdmin &&
+                <th>CV</th>
+              }
+
               <th>Test Status</th>
               <th>Test Date</th>
               {
@@ -178,7 +182,7 @@ const Tests = ({jobsList, jobEdit, isAdmin}) => {
             {
               filteredData.length === 0
                 ? <tr >
-                  <td colSpan={isAdmin ? 8 : 6} style={{textAlign: 'center'}}>No Tests Found</td>
+                  <td colSpan={isAdmin ? 8 : 5} style={{textAlign: 'center'}}>No Tests Found</td>
                 </tr>
                 : filteredData
                   .slice((pageNo - 1) * perPage, ((pageNo - 1) * perPage) + perPage <= filteredData.length ? ((pageNo - 1) * perPage) + perPage : filteredData.length)
@@ -199,7 +203,11 @@ const Tests = ({jobsList, jobEdit, isAdmin}) => {
                     <td>{application.user.firstName}</td>
                     <td>{application.user.lastName}</td>
                     <td>{application.user.email}</td>
-                    <td>{application.user.cv ? application.cv.filename : 'Not Provided'}</td>
+                    {
+                      isAdmin &&
+                      <td>{application.user.user_details ? <a href={`/pdf/${application.user.user_details.cv.filename}`} target='_blank' className='text-decoration-none'><i className='fa fa-file-pdf'/></a>  : 'Not Provided'}</td>
+                    }
+
                     <td>{getTestInterviewStatus(application.test.status)}</td>
                     <td>{moment(application.test.date).format('DD/MM/YYYY')}</td>
                     {
