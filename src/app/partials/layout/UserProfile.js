@@ -34,7 +34,7 @@ class UserProfile extends React.Component {
               </span>
 
               {
-                user.profileImage ? <img alt="Pic" src={user.profileImage.filename} />
+                user.profileImage ? <img alt="Pic" src={`/images/${user.profileImage.filename}`} />
                 : <span className="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold">
                     <b>{user && user.firstName[0]}</b>
                   </span>
@@ -52,7 +52,7 @@ class UserProfile extends React.Component {
           >
             <div className="kt-user-card__avatar">
               {
-                user.profileImage ? <img alt="Pic" src={user.profileImage.filename} />
+                user.profileImage ? <img alt="Pic" src={`/images/${user.profileImage.filename}`} />
                   : <span className="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">
                 {user && user.firstName[0]}
               </span>

@@ -5,4 +5,14 @@ module.exports = function(app) {
             target: 'http://localhost:3001'
         })
     );
+    app.use(
+        createProxyMiddleware('/pdf',{
+            target: 'http://localhost:3001'
+        })
+    );
+    app.use(
+        createProxyMiddleware('/images',{
+            target: 'http://localhost:3001'
+        })
+    );
 };
