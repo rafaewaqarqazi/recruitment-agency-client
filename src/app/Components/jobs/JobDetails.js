@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Redirect, useParams} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../partials/content/Portlet";
 import {getCategory, getDepartment, getExperience, getQualification, getType} from "../../../utils/job-post-data";
 import moment from "moment";
 import Tooltip from "@material-ui/core/Tooltip";
 import {canApply} from "../../../utils";
+import {Alert, Modal} from "react-bootstrap";
+import {applyForJob} from "../../crud/job.crud";
+import * as job from "../../store/ducks/jobs.duck";
 
-const JobDetails = () => {
+const JobDetails = ({jobEdit}) => {
   const params = useParams();
   const { jobsList, isUser, userId } = useSelector(
     ({ jobs: {jobsList}, auth }) => ({
@@ -16,6 +19,39 @@ const JobDetails = () => {
       userId: auth.user && auth.user._id
     })
   );
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState({show: false, message: ''});
+  const [success, setSuccess] = useState({show: false, message: ''});
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    setShow(true);
+  }
+  const handleClickApply = () => {
+    applyForJob({jobId: job._id, userId})
+      .then(res => {
+        if (!res.data.success) {
+          setError({show: true, message: res.data.message})
+          handleClose()
+          closeAlert()
+        } else {
+          setSuccess({show: true, message: res.data.message})
+          handleClose()
+          jobEdit(res.data.job)
+          closeAlert()
+        }
+      })
+      .catch(error => {
+        setError({show: true, message: 'Could not apply!'})
+        handleClose()
+        closeAlert()
+      })
+  }
+  const closeAlert = () => {
+    setTimeout(() => {
+      setError({show: false, message: ''})
+      setSuccess({show: false, message: ''})
+    }, 3000)
+  }
   const job = params.jobId ?
     jobsList.filter(j => j._id === params.jobId).length > 0 ?
       jobsList.filter(j => j._id === params.jobId)[0]
@@ -26,6 +62,8 @@ const JobDetails = () => {
   } else {
     return (
       <div>
+        <Alert show={success.show} variant="success">{success.message}</Alert>
+        <Alert show={error.show} variant="danger">{error.message}</Alert>
         <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
           <PortletHeader
             title={job.title}
@@ -43,9 +81,15 @@ const JobDetails = () => {
                   }
                 </div>
                 {
-                  isUser && !moment().isAfter(job.dueDate) &&
-                    canApply(job, userId) &&
-                  <button className='btn btn-label btn-bold btn-sm ml-3'>
+                  isUser &&
+                  <button
+                    className={`btn btn-${moment().isAfter(job.dueDate) ? 'danger' : 'success'} btn-sm ml-3`}
+                    onClick={handleShow}
+                    disabled={
+                      moment().isAfter(job.dueDate) ||
+                      canApply(job, userId)
+                    }
+                  >
                     Apply
                   </button>
                 }
@@ -108,9 +152,23 @@ const JobDetails = () => {
             </div>
           </PortletBody>
         </Portlet>
+        <Modal show={show} onHide={handleClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Apply for Job</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to proceed?</Modal.Body>
+          <Modal.Footer>
+            <button className='btn btn-default btn-sm' onClick={handleClose}>
+              Close
+            </button>
+            <button className='btn btn-primary btn-sm' onClick={handleClickApply}>
+              Apply Now
+            </button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
 };
 
-export default JobDetails;
+export default connect(null, job.actions)(JobDetails);

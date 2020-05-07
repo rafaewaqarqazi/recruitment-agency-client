@@ -57,12 +57,13 @@ const UserLayout = ({children, layoutConfig}) => {
             <div >
               {children}
             </div>
-            <MainFooter/>
+
           </main>
         </div>
 
         {/* <!-- end:: Body --> */}
       </div>
+      <MainFooter/>
       <ScrollTop />
     </LayoutInitializer>
   )

@@ -3,9 +3,7 @@ import {useSelector} from "react-redux";
 import JobCard from "../../Components/jobs/JobCard";
 import {Alert} from "react-bootstrap";
 import PaginationComponent from "../../Components/PaginationComponent";
-import {Portlet, PortletBody, PortletHeader, PortletHeaderToolbar} from "../../partials/content/Portlet";
-import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {categories, departments, getCategory, getDepartment, getType, types} from "../../../utils/job-post-data";
+import {Portlet} from "../../partials/content/Portlet";
 import Filters from "../../Components/Filters";
 
 export default function Dashboard() {
@@ -40,7 +38,7 @@ export default function Dashboard() {
         ? job.department === filters.department && job.category.includes(filters.category) && job.type.includes(filters.type) && job.title.toLowerCase().includes(filters.search.toLowerCase())
         : job.department.includes(filters.department) && job.category.includes(filters.category) && job.type.includes(filters.type) && job.title.toLowerCase().includes(filters.search.toLowerCase())
     ))
-  }, [filters])
+  }, [filters, jobsList])
   return (
     <div className='pb-5'>
       <Alert show={success.show} variant="success">{success.message}</Alert>
