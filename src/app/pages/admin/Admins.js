@@ -8,7 +8,7 @@ import * as job from "../../store/ducks/jobs.duck";
 import PaginationComponent from "../../Components/PaginationComponent";
 import {getAdmins, removeAdmin} from "../../crud/auth.crud";
 
-const Admins = ({currentAdmin, removeJob}) => {
+const Admins = ({currentAdmin}) => {
   const [show, setShow] = useState(false);
   const [adminId, setAdminId] = useState('');
   const [error, setError] = useState({show: false, message: ''});

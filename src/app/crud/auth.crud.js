@@ -4,10 +4,11 @@ export const LOGIN_URL = "/api/auth/login";
 export const REGISTER_URL = "/api/auth/register";
 export const EDIT_PROFILE_URL = "/api/auth/profile/edit";
 export const EDIT_PROFILE_IMAGE_URL = "/api/auth/profile/image";
-export const REQUEST_PASSWORD_URL = "api/auth/forgot-password";
-export const CHANGE_PASSWORD_URL = "api/auth/change-password";
-export const GET_ADMINS_URL = "api/auth/admins/all";
-export const REMOVE_ADMIN_URL = "api/auth/admins/remove";
+export const REQUEST_PASSWORD_URL = "/api/auth/forgot-password";
+export const CHANGE_PASSWORD_URL = "/api/auth/change-password";
+export const GET_ADMINS_URL = "/api/auth/admins/all";
+export const REMOVE_ADMIN_URL = "/api/auth/admins/remove";
+export const ADMIN_CREATE_URL = "/api/auth/admins/create";
 
 
 export function login(email, password) {
@@ -23,6 +24,9 @@ export function removeAdmin(adminId) {
 
 export function register(data) {
   return axios.post(`${REGISTER_URL}/pdf`, data);
+}
+export function createAdmin(data) {
+  return axios.post(ADMIN_CREATE_URL, data);
 }
 export function editProfile(data) {
   return axios.put(`${EDIT_PROFILE_URL}/pdf`, data);
