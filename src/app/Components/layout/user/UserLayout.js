@@ -36,10 +36,9 @@ const UserLayout = ({children, layoutConfig}) => {
       <HeaderUser/>
       <div
         className="kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed "
-        style={{background: '#f2f3f8', backgroundImage: 'url(/media/bg/bg-9.jpg)', backgroundSize: '100% 430px', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed'}}
+        style={{background: '#f2f3f8', backgroundImage: 'url(/media/bg/bg-9.jpg)', backgroundSize: '100% 470px', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed'}}
       >
         {/* <!-- begin::Body --> */}
-        <HeaderMobile />
         <div className="d-flex kt-wrapper">
           {/*<Hidden xsDown>*/}
           {/*  <AsideLeftUser open={open} setOpen={setOpen}/>*/}

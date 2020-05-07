@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { injectIntl } from "react-intl";
 import * as auth from "../../store/ducks/auth.duck";
 import { requestPassword } from "../../crud/auth.crud";
@@ -9,7 +9,7 @@ import clsx from "clsx";
 import LoginLayout from "../../Components/layout/login/LoginLayout";
 
 const ForgotPassword = ({ intl }) => {
-  const [ isRequested, setIsRequested ] = useState(false);
+  const history = useHistory()
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false)
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
@@ -25,9 +25,6 @@ const ForgotPassword = ({ intl }) => {
     setLoading(false);
     setLoadingButtonStyle({ paddingRight: "2.5rem" });
   };
-  if (isRequested) {
-    return <Redirect to="/auth" />;
-  }
 
   return (
     <div className="kt-grid__item kt-grid__item--fluid  kt-grid__item--order-tablet-and-mobile-1  kt-login__wrapper">
@@ -53,27 +50,25 @@ const ForgotPassword = ({ intl }) => {
           }}
           onSubmit={(values, { setStatus, setSubmitting }) => {
             enableLoading()
-            setTimeout(() => {
-              requestPassword(values.email)
-                .then(() => {
-                  disableLoading()
-                  setSubmitting(false);
-                  setSuccess(true)
-                  setTimeout(() => {
-                    setIsRequested(true);
-                  }, 2000)
-                })
-                .catch(() => {
-                  disableLoading()
-                  setSubmitting(false);
-                  setStatus(
-                    intl.formatMessage(
-                      { id: "AUTH.VALIDATION.NOT_FOUND" },
-                      { name: values.email }
-                    )
-                  );
-                });
-            }, 1000)
+            requestPassword(values.email)
+              .then(() => {
+                disableLoading()
+                setSubmitting(false);
+                setSuccess(true)
+                setTimeout(() => {
+                  history.push('/auth/login')
+                }, 3000)
+              })
+              .catch(() => {
+                disableLoading()
+                setSubmitting(false);
+                setStatus(
+                  intl.formatMessage(
+                    { id: "AUTH.VALIDATION.NOT_FOUND" },
+                    { name: values.email }
+                  )
+                );
+              });
           }}
         >
           {({status, handleSubmit, isSubmitting}) => (

@@ -5,6 +5,7 @@ export const REGISTER_URL = "/api/auth/register";
 export const EDIT_PROFILE_URL = "/api/auth/profile/edit";
 export const EDIT_PROFILE_IMAGE_URL = "/api/auth/profile/image";
 export const REQUEST_PASSWORD_URL = "/api/auth/forgot-password";
+export const RESET_PASSWORD_URL = "/api/auth/reset-password";
 export const CHANGE_PASSWORD_URL = "/api/auth/change-password";
 export const GET_ADMINS_URL = "/api/auth/admins/all";
 export const REMOVE_ADMIN_URL = "/api/auth/admins/remove";
@@ -36,7 +37,10 @@ export function editProfile(data) {
 }
 
 export function requestPassword(email) {
-  return axios.post(REQUEST_PASSWORD_URL, { email });
+  return axios.put(REQUEST_PASSWORD_URL, { email });
+}
+export function resetPassword(data) {
+  return axios.put(RESET_PASSWORD_URL, data);
 }
 export function changePassword(data) {
   return axios.put(CHANGE_PASSWORD_URL, data);

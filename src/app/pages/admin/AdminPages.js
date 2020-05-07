@@ -36,7 +36,7 @@ export default function AdminPages() {
         <AdminRoute path="/account" component={Account} exact/>
         <AdminRoute path="/admins" component={Admins} exact/>
         <AdminRoute path="/admins/new" component={CreateAdmin} exact/>
-        <Redirect to="/error/error-v1" />
+        <Redirect to="/" />
       </Switch>
     </Suspense>
   );

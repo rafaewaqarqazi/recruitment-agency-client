@@ -19,7 +19,7 @@ const Home = () => {
         <div className="container">
           <Alert show={success.show} variant="success">{success.message}</Alert>
           <Alert show={error.show} variant="danger">{error.message}</Alert>
-          <div className="row align-items-center" style={{height: 400}}>
+          <div className="row align-items-center" style={{height: 420}}>
             <div className="col-12 col-sm-7 text-center pb-3 pb-sm-0">
               <h3>We offer Many Job vacancies Right Now!</h3>
               <h6>Find your desire on in a minute</h6>

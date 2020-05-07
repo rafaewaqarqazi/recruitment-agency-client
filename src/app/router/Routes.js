@@ -17,6 +17,7 @@ import Layout from "../../_metronic/layout/Layout";
 import * as routerHelpers from "../router/RouterHelpers";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import UserPages from "../pages/user/UserPages";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 export const Routes = withRouter(({ history }) => {
     const lastLocation = useLastLocation();
@@ -37,6 +38,7 @@ export const Routes = withRouter(({ history }) => {
         <LayoutContextProvider history={history} menuConfig={menuConfig}>
             <Switch>
               <Route path="/auth/forgot-password" component={ForgotPassword}/>
+              <Route path="/auth/reset-password/:token" component={ResetPassword}/>
               <Route path="/logout" component={LogoutPage} />
                 { isAdmin ? (
                   <Layout >
