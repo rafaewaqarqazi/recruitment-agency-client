@@ -145,7 +145,7 @@ const JobDetails = ({jobEdit}) => {
                   <span>{moment(job.dueDate).format('DD-MMM-YYYY')}</span>
                 </div>
               </div>
-              <div className="col-12 col-sm-6">
+              <div className="col-12 col-sm-6" style={{wordBreak: 'break-word'}}>
                 <h5>Description</h5>
                 {job.description}
               </div>
