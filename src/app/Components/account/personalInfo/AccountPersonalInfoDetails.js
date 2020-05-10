@@ -151,10 +151,10 @@ const AccountPersonalInfoDetails = ({user, fulfillUser}) => {
                       lastName: user.lastName,
                       address: user.address,
                       country: user.country,
-                      cv: user.user_details.cv.filename,
+                      cv: user.role === '1' ? user.user_details.cv.filename : "",
                       mobileNo: user.mobileNo
                     }}
-                    validate={editProfileValidations}
+                    validate={values => editProfileValidations(values, user.role === '2')}
                     onSubmit={(values, { setStatus, setSubmitting, resetForm }) => {
                       enableLoading();
                       const formData = new FormData();

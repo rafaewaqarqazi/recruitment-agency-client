@@ -1,18 +1,27 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import UserLayout from "../Components/layout/user/UserLayout";
 import {Link} from "react-router-dom";
 import {Alert} from "react-bootstrap";
-import {useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import JobCard from "../Components/jobs/JobCard";
+import {getAllJobs} from "../crud/job.crud";
+import * as jobsActions from '../store/ducks/jobs.duck'
 
-const Home = () => {
+const Home = ({addJobs}) => {
   const [error, setError] = useState({show: false, message: ''});
   const [success, setSuccess] = useState({show: false, message: ''});
+  useEffect(() => {
+    getAllJobs()
+      .then(({data: {jobs}}) => {
+        addJobs(jobs)
+      })
+  }, [])
   const { jobsList } = useSelector(
     ({ jobs: {jobsList} }) => ({
       jobsList
     })
   );
+  console.log(jobsList)
   return (
     <UserLayout>
       <div style={{marginTop: '-20px'}}>
@@ -33,8 +42,8 @@ const Home = () => {
           </div>
           <div className="row mt-3">
             {
-              jobsList.length === 0 ? <h5 className='text-center w-100 p-5'>No Record Found!</h5>
-              : jobsList.sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn))
+              jobsList && jobsList.length === 0 ? <h5 className='text-center w-100 p-5'>No Record Found!</h5>
+              : jobsList && jobsList.sort((a, b) => new Date(b.postedOn) - new Date(a.postedOn))
                 .map((job, i) => (
                   i < 6 &&
                   <div className="col-12 col-sm-4" key={job._id}>
@@ -49,8 +58,8 @@ const Home = () => {
           </div>
           <div className="row mt-3">
             {
-              jobsList.length === 0 ? <h5 className='text-center w-100 p-5'>No Record Found!</h5>
-              : jobsList.sort((a, b) => b.applications.length - a.applications.length)
+              jobsList && jobsList.length === 0 ? <h5 className='text-center w-100 p-5'>No Record Found!</h5>
+              : jobsList && jobsList.sort((a, b) => b.applications.length - a.applications.length)
                 .map((job, i) => (
                   i < 6 &&
                   <div className="col-12 col-sm-4" key={job._id}>
@@ -67,4 +76,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default connect(null, jobsActions.actions)(Home);

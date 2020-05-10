@@ -1,4 +1,4 @@
-export const editProfileValidations = values => {
+export const editProfileValidations = (values, isAdmin) => {
   const errors = {};
 
   if (!values.firstName) {
@@ -19,7 +19,7 @@ export const editProfileValidations = values => {
   if (!values.country) {
     errors.country = 'Required!'
   }
-  if (!values.cv) {
+  if (!values.cv && !isAdmin) {
     errors.cv = 'Required!'
   }
 
